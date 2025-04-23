@@ -7,12 +7,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vu.oop.passwordmanager.controller.LoggedController">
    <children>
-      <Label layoutX="212.0" layoutY="83.0" text="Welcome, ">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label fx:id="usernameLabel" layoutX="300.0" layoutY="83.0" text="name">
+      <Label fx:id="usernameLabel" alignment="CENTER" layoutX="1.0" layoutY="86.0" prefHeight="25.0" prefWidth="600.0" text="Welcome, username">
          <font>
             <Font size="18.0" />
          </font>
@@ -22,7 +17,7 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="passwordLabel" layoutX="259.0" layoutY="188.0" text="password">
+      <Label fx:id="passwordLabel" alignment="CENTER" layoutX="-1.0" layoutY="188.0" prefHeight="25.0" prefWidth="600.0" text="password" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>

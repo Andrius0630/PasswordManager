@@ -17,7 +17,7 @@ public class LoggedController {
 
     @FXML
     protected void displayName(String username) {
-        usernameLabel.setText(username);
+        usernameLabel.setText("Welcome, " + username);
     }
 
     @FXML
@@ -27,11 +27,6 @@ public class LoggedController {
 
     @FXML
     protected void logout(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vu/oop/passwordmanager/Auth.fxml"));
-        Parent root = loader.load();
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+        ScenesManager.sceneSwitchToAnotherFXML(event, "Auth.fxml");
     }
 }

@@ -21,16 +21,12 @@ public class AuthController {
         String username = userNameField.getText();
         String password = passwordField.getText();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/vu/oop/passwordmanager/Logged.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH + "Logged.fxml"));
         Parent root = loader.load();
-
         LoggedController loggedController = loader.getController();
         loggedController.displayName(username);
         loggedController.displayPassword(password);
 
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
-
+        ScenesManager.sceneSwitchToAnotherRoot(event, root);
     }
 }
