@@ -4,8 +4,13 @@ module vu.oop.passwordmanager {
 
     requires org.controlsfx.controls;
 
+    requires java.sql;
+    requires org.slf4j;
+
     exports vu.oop.passwordmanager.app;
     opens vu.oop.passwordmanager.app to javafx.fxml;
     exports vu.oop.passwordmanager.controller;
     opens vu.oop.passwordmanager.controller to javafx.fxml;
+    exports vu.oop.passwordmanager.db;
+    opens vu.oop.passwordmanager.db to java.sql, org.slf4j;
 }

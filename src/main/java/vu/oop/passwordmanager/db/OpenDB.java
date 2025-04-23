@@ -4,25 +4,25 @@ import java.sql.*;
 
 public class OpenDB {
 
-   static final String DB_URL = "jdbc:mysql://localhost:3306/mktest";
-   static final String USER = "root";
-   static final String PASS = "password";
-   static final String QUERY = "SELECT * FROM creds";
+// SQLite database file path
+static final String DB_URL = "jdbc:sqlite:credentials.db";
+static final String USER = "";
+static final String PASS = "";
+static final String QUERY = "SELECT * FROM users";
+static final String QUERY_TWO = "SELECT domain_name, domain_username, domain_password FROM users_passwords WHERE user_id = &1";
 
-   public static void main(String[] args) {
-      // Open a connection
-      try(Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+public static void main(String[] args) {
+// Open a connection
+   try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
          Statement stmt = conn.createStatement();
          ResultSet rs = stmt.executeQuery(QUERY);) {
-         // Extract data from result set
          while (rs.next()) {
-            // Retrieve by column name
-            System.out.print("userid: " + rs.getString("userid"));
-            System.out.print(", username: " + rs.getString("username"));
-            System.out.println(", userpass: " + rs.getFloat("userpass"));
-         }
-      } catch (SQLException e) {
-         e.printStackTrace();
-      } 
+            System.out.print("\nuserid: " + rs.getString("user_id"));
+            System.out.print(", username: " + rs.getString("user_name"));
+            System.out.print(", userpass: " + rs.getString("user_password"));
+      }
+   } catch (SQLException e) {
+      e.printStackTrace();
    }
+}
 }
