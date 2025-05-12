@@ -1,3 +1,8 @@
+/**
+ * andrius.kolenda@mif.stud.vu.lt
+ * Purpose: File with helper methods for controlling scenes of UI
+ */
+
 package vu.oop.passwordmanager.controller;
 
 import javafx.event.ActionEvent;
@@ -12,6 +17,8 @@ import java.util.Objects;
 
 public class ScenesManager {
     public static final String PATH = "/vu/oop/passwordmanager/";
+    public static final String AUTH_FILE = "Auth.fxml";
+    public static final String LOGGED_FILE = "Logged.fxml";
 
     public static void sceneSwitchToAnotherRoot(ActionEvent event, Parent root) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

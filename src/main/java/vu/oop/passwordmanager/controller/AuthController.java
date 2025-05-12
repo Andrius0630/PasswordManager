@@ -1,3 +1,8 @@
+/**
+ * andrius.kolenda@mif.stud.vu.lt
+ * Purpose: File for controlling the authorization page
+ */
+
 package vu.oop.passwordmanager.controller;
 
 import javafx.event.ActionEvent;
@@ -21,7 +26,7 @@ public class AuthController {
         String username = userNameField.getText();
         String password = passwordField.getText();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH + "Logged.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH + ScenesManager.LOGGED_FILE));
         Parent root = loader.load();
         LoggedController loggedController = loader.getController();
         loggedController.displayName(username);

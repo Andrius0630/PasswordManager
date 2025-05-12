@@ -1,3 +1,8 @@
+/**
+ * andrius.kolenda@mif.stud.vu.lt
+ * Purpose: File for controlling the logged page
+ */
+
 package vu.oop.passwordmanager.controller;
 
 import javafx.event.ActionEvent;
@@ -27,6 +32,6 @@ public class LoggedController {
 
     @FXML
     protected void logout(ActionEvent event) throws IOException {
-        ScenesManager.sceneSwitchToAnotherFXML(event, "Auth.fxml");
+        ScenesManager.sceneSwitchToAnotherFXML(event, ScenesManager.AUTH_FILE);
     }
 }

@@ -1,3 +1,8 @@
+/**
+ * andrius.kolenda@mif.stud.vu.lt
+ * Purpose: File for controlling the authorization page
+ */
+
 package vu.oop.passwordmanager.app;
 
 import javafx.application.Application;
@@ -18,8 +23,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        String firstFMXL = ScenesManager.AUTH_FILE;
         try {
-            Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource(ScenesManager.PATH + "Auth.fxml"))));
+            Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource(ScenesManager.PATH + firstFMXL))));
             stage.setTitle("Password manager app");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
