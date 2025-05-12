@@ -5,7 +5,7 @@
 
 # Project structure
 ## Main clases for programm
-Going by this path "src/main/java/lt/vu/passwordmanager/" you should place new classes
+Going by path ``"src/main/java/lt/vu/passwordmanager/"`` you should place new classes
 1. app/             ← Main class, entry point (e.g., `Main.java`)
 2. controller/      ← JavaFX controllers (for FXML)
 3. model/           ← Data models (User, Entry, etc.)
@@ -14,10 +14,11 @@ Going by this path "src/main/java/lt/vu/passwordmanager/" you should place new c
 6. util/            ← Helpers and utilities
 7. And so on
 ## JavaFX scene configs
-Going by this path "src/main/resources/vu/oop/passwordmanager/" you should find JavaFX scene configs
+Going by path ``"src/main/resources/vu/oop/passwordmanager/"`` you should find JavaFX scene configs
 ## Icons for program
-Going by this path "src/main/resources/icons/" you should find all icons for program
+Going by path ``"src/main/resources/icons/"`` you should find all icons for program
 
 # Contacting
 andrius.kolenda@mif.stud.vu.lt
+
 Kelecius.dovydas@gmail.com
