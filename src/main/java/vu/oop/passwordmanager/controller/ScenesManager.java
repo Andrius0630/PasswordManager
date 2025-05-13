@@ -16,9 +16,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class ScenesManager {
-    public static final String PATH = "/vu/oop/passwordmanager/";
+    private static final String PATH = "/vu/oop/passwordmanager/";
+    public static final String PATH_FXML = PATH + "FXMLFiles/";
     public static final String AUTH_FILE = "Auth.fxml";
     public static final String LOGGED_FILE = "Logged.fxml";
+    public static final String ICONS_PATH = PATH + "icons/";
 
     public static void sceneSwitchToAnotherRoot(ActionEvent event, Parent root) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -27,7 +29,7 @@ public class ScenesManager {
     }
     public static void sceneSwitchToAnotherFXML(ActionEvent event, String fxmlName) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(ScenesManager.class.getResource(PATH + fxmlName)));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(ScenesManager.class.getResource(PATH_FXML + fxmlName)));
         stage.setScene(new Scene(root));
         stage.show();
     }

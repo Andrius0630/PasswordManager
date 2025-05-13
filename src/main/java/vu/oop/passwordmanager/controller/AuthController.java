@@ -26,7 +26,7 @@ public class AuthController {
         String username = userNameField.getText();
         String password = passwordField.getText();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH + ScenesManager.LOGGED_FILE));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + ScenesManager.LOGGED_FILE));
         Parent root = loader.load();
         LoggedController loggedController = loader.getController();
         loggedController.displayName(username);

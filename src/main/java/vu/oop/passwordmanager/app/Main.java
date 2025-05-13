@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import vu.oop.passwordmanager.controller.ScenesManager;
 
@@ -25,7 +26,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         String firstFMXL = ScenesManager.AUTH_FILE;
         try {
-            Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource(ScenesManager.PATH + firstFMXL))));
+            Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource(ScenesManager.PATH_FXML + firstFMXL))));
             stage.setTitle("Password manager app");
             stage.setScene(new Scene(root));
             stage.setResizable(false);
