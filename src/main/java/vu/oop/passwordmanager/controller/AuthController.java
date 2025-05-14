@@ -13,8 +13,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import vu.oop.passwordmanager.db.ApiDB;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class AuthController {
     @FXML private TextField userNameField;
@@ -26,7 +28,28 @@ public class AuthController {
         String username = userNameField.getText();
         String password = passwordField.getText();
 
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + ScenesManager.LOGGED_FILE));
+        try (ApiDB db = new ApiDB(username, password)) {
+            if (db.getConnection() != null) {
+                System.out.println("ApiDB instance created and connected.");
+
+                db.createTABLES(username, password);
+                db.getTABLE("users");
+
+            }
+            else {
+                System.err.println("ApiDB connection failed upon creation.");
+            }
+        }
+        catch (SQLException e) {
+            System.err.println("An SQL exception occurred during or after using ApiDB:");
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            System.err.println("An unexpected exception occurred:");
+            e.printStackTrace();
+        }
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + ScenesManager.LOGGED_FILE + ".fxml"));
         Parent root = loader.load();
         LoggedController loggedController = loader.getController();
         loggedController.displayName(username);

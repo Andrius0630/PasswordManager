@@ -24,11 +24,16 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        String firstFMXL = ScenesManager.AUTH_FILE;
+        String firstFMXL = ScenesManager.AUTH_FILE + ".fxml";
         try {
             Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource(ScenesManager.PATH_FXML + firstFMXL))));
             stage.setTitle("Password manager app");
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+
+            String css = this.getClass().getResource(ScenesManager.CSS_PATH + "Auth" + ".css").toExternalForm();
+            scene.getStylesheets().add(css);
+
+            stage.setScene(scene);
             stage.setResizable(false);
             stage.show();
 

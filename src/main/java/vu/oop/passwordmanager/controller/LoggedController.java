@@ -17,17 +17,19 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class LoggedController {
-    @FXML private Label usernameLabel;
-    @FXML private Label passwordLabel;
+    @FXML private Label usernameLabelTEMP;
+    @FXML private Label passwordLabelTEMP;
+
+
 
     @FXML
     protected void displayName(String username) {
-        usernameLabel.setText("Welcome, " + username);
+        usernameLabelTEMP.setText("Welcome, " + username);
     }
 
     @FXML
     protected void displayPassword(String password) {
-        passwordLabel.setText(password);
+        passwordLabelTEMP.setText(password);
     }
 
     @FXML

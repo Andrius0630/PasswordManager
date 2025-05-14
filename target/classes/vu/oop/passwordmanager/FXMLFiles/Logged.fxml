@@ -2,26 +2,51 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vu.oop.passwordmanager.controller.LoggedController">
    <children>
-      <Label fx:id="usernameLabel" alignment="CENTER" layoutX="1.0" layoutY="86.0" prefHeight="25.0" prefWidth="600.0" text="Welcome, username">
+      <Label fx:id="usernameLabelTEMP" alignment="CENTER" layoutY="28.0" prefHeight="25.0" prefWidth="600.0" text="Welcome, username">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="225.0" layoutY="137.0" text="Your password is:">
+      <Label layoutX="224.0" layoutY="53.0" text="Your password is:">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label fx:id="passwordLabel" alignment="CENTER" layoutX="-1.0" layoutY="188.0" prefHeight="25.0" prefWidth="600.0" text="password" textAlignment="CENTER">
+      <Label fx:id="passwordLabelTEMP" alignment="CENTER" layoutY="78.0" prefHeight="25.0" prefWidth="600.0" text="password" textAlignment="CENTER">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Button fx:id="logOutButton" layoutX="517.0" layoutY="14.0" mnemonicParsing="false" onAction="#logout" text="Log out!" />
+      <Button fx:id="logOutButton" layoutX="517.0" layoutY="360.0" mnemonicParsing="false" onAction="#logout" text="Log out!" />
+      <ScrollPane fx:id="scrollPane" layoutX="152.0" layoutY="115.0" prefHeight="268.0" prefWidth="297.0">
+         <content>
+            <Pane fx:id="credPane1" prefHeight="65.0" prefWidth="276.0">
+               <children>
+                  <Rectangle fx:id="rect1" arcHeight="5.0" arcWidth="5.0" fill="#c6e2fc" height="65.0" stroke="BLACK" strokeType="OUTSIDE" width="276.0" />
+                  <ImageView fx:id="credSitePic1" fitHeight="35.0" fitWidth="35.0" layoutX="14.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../icons/placeholder.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="credUsrLabel1" layoutX="50.0" layoutY="1.0" prefHeight="26.0" prefWidth="219.0" text="username">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="credPasswdLabel1" layoutX="50.0" layoutY="25.0" prefHeight="26.0" prefWidth="219.0" text="passwd" />
+               </children>
+            </Pane>
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>
