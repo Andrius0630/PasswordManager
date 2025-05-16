@@ -33,7 +33,7 @@ public class AuthController {
                 System.out.println("ApiDB instance created and connected.");
 
                 db.createTABLES(username, password);
-                db.getTABLE("users");
+                db.getTABLE(String.format("%s_pass", username));
 
             }
             else {
@@ -42,7 +42,12 @@ public class AuthController {
         }
         catch (SQLException e) {
             System.err.println("An SQL exception occurred during or after using ApiDB:");
-            e.printStackTrace();
+            if (e.getErrorCode()==19) {
+                // CONTROLLER CODE TO INFORM USER OF ERROR [NOT UNIQUE] // FRONTEND
+                // ... //
+                // ... //
+            }
+            else e.printStackTrace();
         }
         catch (Exception e) {
             System.err.println("An unexpected exception occurred:");
