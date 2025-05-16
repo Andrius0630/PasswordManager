@@ -11,7 +11,7 @@ public class ApiDB implements AutoCloseable {
 
     public ApiDB() {}
 
-    public ApiDB(String USER, String PASS) {
+    public ApiDB(String USER, String PASS) throws SQLException {
         // Store user and pass as instance variables
         this.USER = USER;
         this.PASS = PASS;
@@ -23,9 +23,11 @@ public class ApiDB implements AutoCloseable {
             if (this.conn != null) {
                 System.out.println("Database connected successfully.");
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             System.err.println("Database connection error:");
             e.printStackTrace();
+            throw e;
         }
     }
 
@@ -51,19 +53,27 @@ public class ApiDB implements AutoCloseable {
                                              "VALUES  (\"%s\", \"%s\")", USER, PASS));
 
             stmt.executeUpdate(createUser_PasswordsTABLE);
-          }
-          catch (SQLException e) {
-            e.printStackTrace();
-            SQLException nextEx = e.getNextException();
-            while (nextEx != null) {
-                System.err.println("Chained Exception:");
-                nextEx.printStackTrace();
-                nextEx = nextEx.getNextException();
+        }
+        catch (SQLException e) {
+            if (e.getErrorCode()==19) {
+                System.err.println("User already exists, try again. Error: " + e.getErrorCode());
+                throw e;
+            }
+            else {
+                System.err.println("Unmanaged error. Error: " + e.getErrorCode());
+                e.printStackTrace();
+                SQLException nextEx = e.getNextException();
+                while (nextEx != null) {
+                    System.err.println("Chained Exception:");
+                    nextEx.printStackTrace();
+                    nextEx = nextEx.getNextException();
+                    throw e;
+                }
             }
         }
     }
     
-    public void getTABLE(String TABLE) {
+    public void getTABLE(String TABLE) throws SQLException {
         try(Statement stmt = conn.createStatement();) {
             ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s", TABLE));
             while (rs.next()) {
@@ -89,10 +99,11 @@ public class ApiDB implements AutoCloseable {
             try {
                 this.conn.close();
                 System.out.println("\nDatabase connection closed.");
-            } catch (SQLException e) {
+            }
+            catch (SQLException e) {
                 System.err.println("Error closing database connection:");
                 e.printStackTrace();
-                throw e; // Re-throw the exception so calling code knows closing failed
+                throw e;
             }
         }
     }
