@@ -30,18 +30,21 @@ public class AuthController {
 
         try (ApiDB db = new ApiDB(username, password)) {
             if (db.getConnection() != null) {
-                System.out.println("ApiDB instance created and connected.");
+                System.out.println("[DEBUG] ApiDB instance created and connected.");
 
                 db.createTABLES(username, password);
+
+                db.populateUSER_PASSWORDS("google.com", "Username", "Password123");
+
                 db.getTABLE(String.format("%s_pass", username));
 
             }
             else {
-                System.err.println("ApiDB connection failed upon creation.");
+                System.err.println("[DEBUG] ApiDB connection failed upon creation.");
             }
         }
         catch (SQLException e) {
-            System.err.println("An SQL exception occurred during or after using ApiDB:");
+            System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB:");
             if (e.getErrorCode()==19) {
                 // CONTROLLER CODE TO INFORM USER OF ERROR [NOT UNIQUE] // FRONTEND
                 // ... //
@@ -50,7 +53,7 @@ public class AuthController {
             else e.printStackTrace();
         }
         catch (Exception e) {
-            System.err.println("An unexpected exception occurred:");
+            System.err.println("[DEBUG] An unexpected exception occurred:");
             e.printStackTrace();
         }
 
