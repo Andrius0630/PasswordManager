@@ -9,54 +9,47 @@ import vu.oop.passwordmanager.util.HelperDomainObject;
  * ApiDB class provides methods to interact with an SQLite database for managing user credentials.
  * It allows creating tables, inserting, updating, deleting, and retrieving data from the database.
  * This class implements AutoCloseable to ensure the database connection is closed properly.
- * * <p>
- * * It is designed to be used with a single user, where the username and password are provided
+ * <p>
+ * It is designed to be used with a single user, where the username and password are provided
  * during instantiation.
- * * <p>
- * * Example usage:
- * * <pre>
- * * ApiDB db = new ApiDB("username", "password");
- * * * db.createTABLES("username", "password");
- * * * db.populateTABLE("username_pass", new String[]{"domain_name", "domain_username", "domain_password"},
- * * *                   new String[]{"example.com", "user", "pass"});
- * * * ArrayList&lt;HelperDomainObject&gt; domains = db.getTABLE("username_pass");
- * * * db.updateTABLEValue("username_pass", "password_id", 1,
- * * *                     new String[]{"domain_password"}, new String[]{"newpass"});
- * * * db.removeTABLEValue("username_pass", "password_id", 1);
- * * * db.close();
- * * * </pre>
+ * </p>
  * @author Dovydas Kelečius
  * Contact: kelecius.dovydas@gmail.com
- * @version 1.2
+ * @version 1.5
  * @since 2025-04-23
  * This class is part of the vu.oop.passwordmanager.db package.
- * * * Note: This class requires the SQLite JDBC driver to be included in the project dependencies.
+ * * Note: This class requires the SQLite JDBC driver to be included in the project dependencies.
  */
 public class ApiDB implements AutoCloseable {
     // SQLite database file path
     private static final String DB_URL = "jdbc:sqlite:credentials.db";
-    private String USER = "";
-    private String PASS = "";
+    private String USER = ""; 
+    private String PASS = ""; 
     private Connection conn;
 
-    public ApiDB() {}
+    public ApiDB() {
+        // Default constructor, connection will be established by ApiDB(String, String)
+    }
 
     /**
      * Constructor to initialize the database connection with user credentials.
+     * In this context, USER and PASS are expected to be the Base64 encoded
+     * SHA-256 hash of the master password, which will be used to identify
+     * the user's specific password table and for the 'users' table entry.
      *
-     * @param USER The username for the database connection.
-     * @param PASS The password for the database connection.
+     * @param USER The Base64 encoded SHA-256 hash of the master password (used as username for table naming).
+     * @param PASS The Base64 encoded SHA-256 hash of the master password (used as password for 'users' table).
      * @throws SQLException If an SQL error occurs during connection.
      */
     public ApiDB(String USER, String PASS) throws SQLException {
         // Store user and pass as instance variables
         this.USER = USER;
         this.PASS = PASS;
-
-        System.out.println("[DEBUG] User: " + this.USER);
+        System.out.println("[DEBUG] User (Base64 Hash): " + this.USER);
 
         try {
-            this.conn = DriverManager.getConnection(DB_URL, this.USER, this.PASS);
+            // Establish a connection to the SQLite database
+            this.conn = DriverManager.getConnection(DB_URL);
             if (this.conn != null) {
                 System.out.println("[DEBUG] Database connected successfully.");
             }
@@ -69,63 +62,104 @@ public class ApiDB implements AutoCloseable {
     }
 
     /**
-     * Creates the necessary tables for the user in the database.
+     * Helper method to sanitize a Base64 string for use as an SQL table name.
+     * Replaces problematic characters ('+', '/', '=') with underscores.
      *
-     * @param USER The username for which to create the tables.
-     * @param PASS The password for the user.
+     * @param input The Base64 encoded string (e.g., master password hash).
+     * @return A sanitized string suitable for an SQL table name.
+     */
+    private String getSanitizedTableName(String input) {
+        // Replace characters that are problematic in unquoted SQL identifiers
+        // Base64 uses '+', '/', and '=' (padding). Replace them all with underscores.
+        String sanitized = input.replace('+', '_')
+                                .replace('/', '_')
+                                .replace('=', '_');
+        System.out.println("[DEBUG] Sanitized '" + input + "' to '" + sanitized + "' for table name.");
+        return sanitized;
+    }
+
+    /**
+     * Creates the necessary tables for the user in the database.
+     * This method now uses the instance variables this.USER and this.PASS
+     * which are expected to be the Base64 encoded SHA-256 hash of the master password.
+     * It creates a fixed "users" table and a dynamic "sanitized_hash_pass" table.
+     *
      * @throws SQLException If an SQL error occurs during table creation.
      */
-    public void createTABLES(String USER, String PASS) throws SQLException {
-        final String createUsersTABLE = 
-        "CREATE TABLE IF NOT EXISTS users" +
-        "(user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-        "user_name TEXT NOT NULL UNIQUE," + 
-        "user_password TEXT NOT NULL UNIQUE);";
+    public void createTABLES() throws SQLException {
+        // Sanitize the USER string for use in dynamic table names
+        String sanitizedUserHashTableName = getSanitizedTableName(this.USER);
+
+        // Fixed table name for central users table
+        final String createUsersTABLE =
+            "CREATE TABLE IF NOT EXISTS \"users\" (" +
+            "user_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+            "user_name TEXT NOT NULL UNIQUE," +
+            "user_password TEXT NOT NULL UNIQUE);";
+
+        // Dynamic table for user's passwords, named after the sanitized master password hash
         final String createUser_PasswordsTABLE = String.format(
-        "CREATE TABLE IF NOT EXISTS %s_pass " +
-        "(password_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-        "domain_name TEXT NOT NULL," +
-        "domain_username TEXT NOT NULL," +
-        "domain_password TEXT NOT NULL);", USER);
+            "CREATE TABLE IF NOT EXISTS \"%s_pass\" (" +
+            "password_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+            "domain_name TEXT NOT NULL," +
+            "domain_username TEXT NOT NULL," +
+            "domain_password TEXT NOT NULL);", sanitizedUserHashTableName);
+
+        System.out.println("[DEBUG] Creating tables for user and user_pass.");
 
         try (Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(createUsersTABLE);
+            stmt.executeUpdate(createUsersTABLE); // Execute creation of the fixed "users" table
+            System.out.println("[DEBUG] Central 'users' table created or already exists.");
 
-            stmt.executeUpdate(String.format("INSERT INTO users(user_name, user_password) " +
-                                             "VALUES  (\"%s\", \"%s\")", USER, PASS));
+
+            String insertUserSQL = "INSERT INTO \"users\"(user_name, user_password) VALUES (?, ?)";
+            try (PreparedStatement pstmt = conn.prepareStatement(insertUserSQL)) {
+                pstmt.setString(1, this.USER);
+                pstmt.setString(2, this.PASS);
+                pstmt.executeUpdate();
+                System.out.println("[DEBUG] User '" + this.USER + "' inserted into 'users' table.");
+            }
 
             stmt.executeUpdate(createUser_PasswordsTABLE);
+
         }
         catch (SQLException e) {
-            if (e.getErrorCode()==19) {
-                System.err.println("[DEBUG] User already exists, try again. Error: " + e.getErrorCode());
-                throw e;
+            if (e.getErrorCode() == 19) { // SQLite UNIQUE constraint violation
+                System.err.println("[DEBUG] User '" + this.USER + "' already exists, tables likely exist. Error: " + e.getErrorCode());
+                if (e.getMessage().contains("UNIQUE constraint failed: users.user_name")) {
+                    System.err.println("[DEBUG] User already exists in 'users' table. Skipping insert.");
+                }
+                else {
+                    System.err.println("[DEBUG] Error creating tables or inserting user: " + e.getMessage());
+                }
             }
             else {
-                System.err.println("[DEBUG] Unmanaged error. Error: " + e.getErrorCode());
+                System.err.println("[DEBUG] Unmanaged error during table creation. Error: " + e.getErrorCode());
                 e.printStackTrace();
-                SQLException nextEx = e.getNextException();
-                while (nextEx != null) {
-                    System.err.println("[DEBUG] Chained Exception:");
-                    nextEx.printStackTrace();
-                    nextEx = nextEx.getNextException();
-                    throw e;
-                }
+                throw e; // Re-throw for other critical errors
             }
         }
     }
-    
+
     /**
      * Retrieves all rows from the specified table.
+     * The TABLE parameter is now expected to be the Base64 encoded SHA-256 hash
+     * which will be sanitized to form the actual user-specific password table name.
      *
-     * @param TABLE The name of the table to retrieve data from.
+     * @param TABLE The Base64 encoded SHA-256 hash (used to derive the table name).
      * @return An ArrayList of HelperDomainObject containing the retrieved data.
      * @throws SQLException If an SQL error occurs.
      */
     public ArrayList<HelperDomainObject> getTABLE(String TABLE) throws SQLException {
-            ArrayList<HelperDomainObject> domainObjects = new ArrayList<>();                 
-        try(Statement stmt = conn.createStatement();) {
-            ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s", TABLE));
+        ArrayList<HelperDomainObject> domainObjects = new ArrayList<>();
+        // Sanitize the TABLE string for use in table names
+        String sanitizedTableName = getSanitizedTableName(TABLE);
+
+        // Quote the table name for retrieval
+        String selectSQL = String.format("SELECT * FROM \"%s\"", sanitizedTableName);
+
+        try(Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(selectSQL);
 
             // Iterate through the data in the result set and insert into arraylist.
             while (rs.next()) {
@@ -134,25 +168,27 @@ public class ApiDB implements AutoCloseable {
                 String domainUsername = rs.getString("domain_username");
                 String domainPassword = rs.getString("domain_password");
 
-                // Create a new HelperDomainObject and add it to the list
                 HelperDomainObject domainObject = new HelperDomainObject(indexPassword, domainName, domainUsername, domainPassword);
                 System.out.printf("[DEBUG] Domain Object: %s%n", domainObject.toString());
                 domainObjects.add(domainObject);
-            
             }
         }
         catch (SQLException e) {
+            System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB (getTABLE for " + sanitizedTableName + "_pass):");
             e.printStackTrace();
+            throw e;
         }
 
-        System.out.println("[DEBUG] Finished retrieving data from table: " + TABLE);
+        System.out.println("[DEBUG] Finished retrieving data from table: " + sanitizedTableName + "_pass");
         return domainObjects;
     }
 
     /**
      * Populates the specified table with values.
+     * The TABLE parameter is now expected to be the Base64 encoded SHA-256 hash
+     * which will be sanitized to form the actual user-specific password table name.
      *
-     * @param TABLE The name of the table to populate.
+     * @param TABLE The Base64 encoded SHA-256 hash (used to derive the table name).
      * @param columns The names of the columns to insert values into.
      * @param values The values to insert into the columns.
      * @throws SQLException If an SQL error occurs.
@@ -162,28 +198,38 @@ public class ApiDB implements AutoCloseable {
             throw new IllegalArgumentException("Columns and values array length must match.");
         }
 
+        // Sanitize the TABLE string for use in table names
+        String sanitizedTableName = getSanitizedTableName(TABLE);
+
         StringBuilder columnsPart = new StringBuilder();
-        StringBuilder valuesPart = new StringBuilder();
+        StringBuilder valuesPlaceholders = new StringBuilder();
 
         for (int i = 0; i < columns.length; i++) {
             columnsPart.append(columns[i]);
-            valuesPart.append("\"").append(values[i]).append("\"");
+            valuesPlaceholders.append("?");
             if (i < columns.length - 1) {
                 columnsPart.append(", ");
-                valuesPart.append(", ");
+                valuesPlaceholders.append(", ");
             }
         }
 
+        // Quote the table name for insertion
         final String sql = String.format(
-            "INSERT INTO %s (%s) VALUES(%s);",
-            TABLE, columnsPart.toString(), valuesPart.toString()
+            "INSERT INTO \"%s\" (%s) VALUES(%s);",
+            sanitizedTableName, columnsPart.toString(), valuesPlaceholders.toString()
         );
 
-        System.err.println("[DEBUG] " + sql);
+        System.out.println("[DEBUG] " + sql);
 
-        try (Statement stmt = conn.createStatement()) {
-            stmt.executeUpdate(sql);
+        try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            for (int i = 0; i < values.length; i++) {
+                pstmt.setString(i + 1, values[i]);
+            }
+            pstmt.executeUpdate();
+            System.out.println("[DEBUG] Data inserted into \"" + sanitizedTableName + "_pass\".");
         } catch (SQLException e) {
+            System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB (populateTABLE for " + sanitizedTableName + "_pass):");
+            e.printStackTrace();
             throw e;
         }
     }
@@ -191,19 +237,27 @@ public class ApiDB implements AutoCloseable {
     /**
      * Removes a row from the specified table.
      *
-     * @param TABLE The name of the table to remove from.
+     * @param TABLE The Base64 encoded SHA-256 hash (used to derive the table name).
      * @param idColumn The name of the ID column to identify the row.
      * @param index The value of the ID column for the row to remove.
      * @throws SQLException If an SQL error occurs.
      */
     public void removeTABLEValue(String TABLE, String idColumn, Integer index) throws SQLException {
-        final String deleteTABLE = String.format("DELETE FROM %s WHERE %s = %d;", TABLE, idColumn, index);
+        
+        String sanitizedTableName = getSanitizedTableName(TABLE);
 
-        try (Statement stmt = conn.createStatement()) {
-            System.err.println("[DEBUG] Deleting from TABLE");
-            stmt.executeUpdate(deleteTABLE);
+        
+        final String deleteTABLE = String.format("DELETE FROM \"%s\" WHERE %s = ?;", sanitizedTableName, idColumn);
+
+        try (PreparedStatement pstmt = conn.prepareStatement(deleteTABLE)) { // Use PreparedStatement
+            pstmt.setInt(1, index);
+            System.out.println("[DEBUG] Deleting from TABLE \"" + sanitizedTableName + "\" where " + idColumn + " = " + index);
+            pstmt.executeUpdate();
+            System.out.println("[DEBUG] Row removed successfully.");
         }
         catch (SQLException e) {
+            System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB (removeTABLEValue for " + sanitizedTableName + "_pass):");
+            e.printStackTrace();
             throw e;
         }
     }
@@ -211,7 +265,7 @@ public class ApiDB implements AutoCloseable {
     /**
      * Updates a row in the specified table.
      *
-     * @param TABLE The name of the table to update.
+     * @param TABLE The Base64 encoded SHA-256 hash (used to derive the table name).
      * @param idColumn The name of the ID column to identify the row.
      * @param index The value of the ID column for the row to update.
      * @param columns The names of the columns to update.
@@ -222,22 +276,38 @@ public class ApiDB implements AutoCloseable {
         if (columns.length != values.length) {
             throw new IllegalArgumentException("Columns and values array length must match.");
         }
+        // Sanitize the TABLE string for use in table names
+        String sanitizedTableName = getSanitizedTableName(TABLE);
+
         StringBuilder setClause = new StringBuilder();
-        // Build the SET clause for the SQL UPDATE statement
         for (int i = 0; i < columns.length; i++) {
-            setClause.append(String.format("%s = \"%s\"", columns[i], values[i]));
+            setClause.append(String.format("%s = ?", columns[i]));
             if (i < columns.length - 1) {
                 setClause.append(", ");
             }
         }
-        final String updateTABLE = String.format(
-            "UPDATE %s SET %s WHERE %s = %d;", TABLE, setClause.toString(), idColumn, index);
 
-        try (Statement stmt = conn.createStatement()) {
-            System.err.println("[DEBUG] Updating TABLE");
-            stmt.executeUpdate(updateTABLE);
+        if (setClause.length() == 0) {
+            System.out.println("[DEBUG] No fields to update for password_id: " + index + " in " + sanitizedTableName);
+            return;
+        }
+
+        final String updateTABLE = String.format(
+            "UPDATE \"%s\" SET %s WHERE %s = ?;", sanitizedTableName, setClause.toString(), idColumn);
+
+        try (PreparedStatement pstmt = conn.prepareStatement(updateTABLE)) {
+            int paramIndex = 1;
+            for (String val : values) {
+                pstmt.setString(paramIndex++, val); // Set values for update columns
+            }
+            pstmt.setInt(paramIndex++, index); // Set value for the WHERE clause
+            System.out.println("[DEBUG] Updating TABLE \"" + sanitizedTableName + " for " + idColumn + " = " + index);
+            pstmt.executeUpdate();
+            System.out.println("[DEBUG] Row updated successfully.");
         }
         catch (SQLException e) {
+            System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB (updateTABLEValue for " + sanitizedTableName + ":");
+            e.printStackTrace();
             throw e;
         }
     }
@@ -271,5 +341,4 @@ public class ApiDB implements AutoCloseable {
             }
         }
     }
-    
 }

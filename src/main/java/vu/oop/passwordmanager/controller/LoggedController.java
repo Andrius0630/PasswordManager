@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+import vu.oop.passwordmanager.service.EncryptionAlgorithm;
 
 import java.io.IOException;
 
@@ -21,10 +22,9 @@ public class LoggedController {
     @FXML private Label passwordLabelTEMP;
 
 
-
     @FXML
-    protected void displayName(String username) {
-        usernameLabelTEMP.setText("Welcome, " + username);
+    protected void displayName(String username, String usernameEncrypted) {
+        usernameLabelTEMP.setText("Welcome, " + username + " (" + usernameEncrypted + ")");
     }
 
     @FXML
