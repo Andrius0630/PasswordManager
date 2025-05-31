@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import vu.oop.passwordmanager.db.HelperDomainObject;
 import vu.oop.passwordmanager.db.ApiDB;
+import vu.oop.passwordmanager.util.HelperDomainObject;
 
 public class AuthController {
     @FXML private TextField userNameField;
@@ -38,32 +38,46 @@ public class AuthController {
                 // Mandatory: Create tables for the user (Stays in onLoginClick)
                 db.createTABLES(username, password);
 
+                // Everything below is just an example of how to use the ApiDB class methods on diffrent buttons.
                 // Example of when pressed to insert new password FRONTEND
-                db.populateTABLE(username+"_pass", "google.com", "Username", "Password123"); 
-                db.populateTABLE(username+"_pass", "google.net", "Username222", "Password155");
+                db.populateTABLE(username + "_pass",
+                new String[] {"domain_name", "domain_username", "domain_password"},
+                new String[] {"google.com", "Username111",      "Password123"}
+                );
+
+                db.populateTABLE(username + "_pass",                                // Table to populate
+                new String[] {"domain_name", "domain_username", "domain_password"}, // Column names
+                new String[] {"youtube.com", "Username222",     "Password456"}      // Values to insert
+                );
 
                 // Example of retrieving a table for the user
                 ArrayList<HelperDomainObject> arrayDomains = db.getTABLE(username + "_pass");
 
                 // Example of deleting a domain's password
-                db.removeTABLEValue(username + "_pass", 2);
+                db.removeTABLEValue(username + "_pass", "password_id", 2);
 
                 // Debugging output to verify the retrieved domains
-                // println("[DEBUG] Retrieved domains:");
-                // arrayDomains = db.getTABLE(username + "_pass");
-                // for (HelperDomainObject domain : arrayDomains) {
-                //     System.out.println("[DEBUG] Retrieved domain: " + domain);
-                // }
+                System.out.println("\n[DEBUG] Retrieved domains:");
+                arrayDomains = db.getTABLE(username + "_pass");
+                for (HelperDomainObject domain : arrayDomains) {
+                    System.out.println("[DEBUG] Retrieved domain: " + domain);
+                }
 
                 // Example of updating a domain's password
-                db.updateTABLEValue(username + "_pass", 1, "google.com", "NewUsername", "NewPassword123");
+                db.updateTABLEValue(
+                    username + "_pass",                                  // Table to update
+                    "password_id",                              // Column where the ID is stored
+                    1,                                             // ID of the row to update
+                    new String[] {"domain_name", "domain_password"},     // Columns to update
+                    new String[] {"youtube.com", "NewPassword789"}       // New values for the columns
+                );
 
                 // Debugging output to verify the updated domains
-                // println("[DEBUG] Updated domains:");
-                // arrayDomains = db.getTABLE(username + "_pass");
-                // for (HelperDomainObject domain : arrayDomains) {
-                //     System.out.println("[DEBUG] Retrieved domain: " + domain);
-                // }
+                System.out.println("\n[DEBUG] Updated domains:");
+                arrayDomains = db.getTABLE(username + "_pass");
+                for (HelperDomainObject domain : arrayDomains) {
+                    System.out.println("[DEBUG] Retrieved domain: " + domain);
+                }
 
             }
             else {

@@ -1,5 +1,16 @@
-package vu.oop.passwordmanager.db;
+package vu.oop.passwordmanager.util;
 
+/**
+ * HelperDomainObject is a simple Java class that represents a domain object
+ * with properties such as index, domain name, username, and password.
+ * It implements Serializable and Cloneable interfaces for object serialization
+ * and cloning capabilities.
+ * @author Dovydas Kelečius
+ * Contact: kelecius.dovydas@gmail.com
+ * @version 1.1
+ * @since 2025-05-31
+ * * This class is part of the vu.oop.passwordmanager.util package,
+ */
 public class HelperDomainObject implements java.io.Serializable, Cloneable {
     private Integer index;
     private String domainName;
