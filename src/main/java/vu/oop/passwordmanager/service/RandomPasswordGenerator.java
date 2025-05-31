@@ -18,11 +18,6 @@ public class RandomPasswordGenerator {
     private static final String LOWER = UPPER.toLowerCase();
     private static final String DIGITS = "0123456789";
     private static final String SPECIAL_CHARS = "!@#$%^&*()_+{}[]";
-    private Boolean includeUpperCase = true;
-    private Boolean includeLowerCase = true;
-    private Boolean includeDigits = true;
-    private Boolean includeSpecialChars = true;
-    private Boolean includeAllChars = true;
 
     /**
      * It uses SecureRandom for better security in password generation.
