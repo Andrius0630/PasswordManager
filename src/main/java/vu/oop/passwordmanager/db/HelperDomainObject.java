@@ -1,0 +1,67 @@
+package vu.oop.passwordmanager.db;
+
+public class HelperDomainObject implements java.io.Serializable, Cloneable {
+    private Integer index;
+    private String domainName;
+    private String domainUsername;
+    private String domainPassword;
+
+    public HelperDomainObject(Integer index, String domainName, String domainUsername, String domainPassword) {
+        this.index = index;
+        this.domainName = domainName;
+        this.domainUsername = domainUsername;
+        this.domainPassword = domainPassword;
+    }
+
+    public Integer getIndex() {
+        return index;
+    }
+
+    public String getDomainName() {
+        return domainName;
+    }
+
+    public void setDomainName(String domainName) {
+        this.domainName = domainName;
+    }
+
+    public String getDomainUsername() {
+        return domainUsername;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
+    }
+
+    public void setDomainUsername(String domainUsername) {
+        this.domainUsername = domainUsername;
+    }
+
+    public String getDomainPassword() {
+        return domainPassword;
+    }
+
+    public void setDomainPassword(String domainPassword) {
+        this.domainPassword = domainPassword;
+    }
+
+    @Override
+    public String toString() {
+        return "HelperDomainObject{" +
+                "index=" + index +
+                ", domainName='" + domainName + '\'' +
+                ", domainUsername='" + domainUsername + '\'' +
+                ", domainPassword='" + domainPassword + '\'' +
+                '}';
+    }
+
+    @Override
+    public HelperDomainObject clone() {
+        try {
+            return (HelperDomainObject) super.clone();
+        }
+        catch (CloneNotSupportedException e) {
+            throw new AssertionError("Cloning not supported", e);
+        }
+    }
+}

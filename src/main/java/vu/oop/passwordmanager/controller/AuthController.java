@@ -13,10 +13,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.scene.Node;
-import vu.oop.passwordmanager.db.ApiDB;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import vu.oop.passwordmanager.db.HelperDomainObject;
+import vu.oop.passwordmanager.db.ApiDB;
 
 public class AuthController {
     @FXML private TextField userNameField;
@@ -32,11 +35,35 @@ public class AuthController {
             if (db.getConnection() != null) {
                 System.out.println("[DEBUG] ApiDB instance created and connected.");
 
+                // Mandatory: Create tables for the user (Stays in onLoginClick)
                 db.createTABLES(username, password);
 
-                db.populateUSER_PASSWORDS("google.com", "Username", "Password123");
+                // Example of when pressed to insert new password FRONTEND
+                db.populateTABLE(username+"_pass", "google.com", "Username", "Password123"); 
+                db.populateTABLE(username+"_pass", "google.net", "Username222", "Password155");
 
-                db.getTABLE(String.format("%s_pass", username));
+                // Example of retrieving a table for the user
+                ArrayList<HelperDomainObject> arrayDomains = db.getTABLE(username + "_pass");
+
+                // Example of deleting a domain's password
+                db.removeTABLEValue(username + "_pass", 2);
+
+                // Debugging output to verify the retrieved domains
+                // println("[DEBUG] Retrieved domains:");
+                // arrayDomains = db.getTABLE(username + "_pass");
+                // for (HelperDomainObject domain : arrayDomains) {
+                //     System.out.println("[DEBUG] Retrieved domain: " + domain);
+                // }
+
+                // Example of updating a domain's password
+                db.updateTABLEValue(username + "_pass", 1, "google.com", "NewUsername", "NewPassword123");
+
+                // Debugging output to verify the updated domains
+                // println("[DEBUG] Updated domains:");
+                // arrayDomains = db.getTABLE(username + "_pass");
+                // for (HelperDomainObject domain : arrayDomains) {
+                //     System.out.println("[DEBUG] Retrieved domain: " + domain);
+                // }
 
             }
             else {
@@ -46,7 +73,7 @@ public class AuthController {
         catch (SQLException e) {
             System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB:");
             if (e.getErrorCode()==19) {
-                // CONTROLLER CODE TO INFORM USER OF ERROR [NOT UNIQUE] // FRONTEND
+                // CONTROLLER CODE TO INFORM USER OF ERROR [ERROR: NOT UNIQUE] // FRONTEND TODO
                 // ... //
                 // ... //
             }

@@ -1,6 +1,8 @@
 package vu.oop.passwordmanager.db;
 
 import java.sql.*;
+import java.util.ArrayList;
+import vu.oop.passwordmanager.db.HelperDomainObject;
 
 public class ApiDB implements AutoCloseable {
     // SQLite database file path
@@ -15,6 +17,8 @@ public class ApiDB implements AutoCloseable {
         // Store user and pass as instance variables
         this.USER = USER;
         this.PASS = PASS;
+
+        HelperDomainObject domainObject = new HelperDomainObject(null, "", "", "");
 
         System.out.println("[DEBUG] User: " + this.USER);
 
@@ -71,29 +75,35 @@ public class ApiDB implements AutoCloseable {
         }
     }
     
-    public void getTABLE(String TABLE) throws SQLException {
+    public ArrayList<HelperDomainObject> getTABLE(String TABLE) throws SQLException {
+            ArrayList<HelperDomainObject> domainObjects = new ArrayList<>();                 
         try(Statement stmt = conn.createStatement();) {
             ResultSet rs = stmt.executeQuery(String.format("SELECT * FROM %s", TABLE));
             ResultSetMetaData rsmd = rs.getMetaData();
-            int columnsNumber = rsmd.getColumnCount();                    
 
-            // Iterate through the data in the result set and display it. 
+            // Iterate through the data in the result set and insert into arraylist.
             while (rs.next()) {
-                //Print one row          
-                for(int i = 1 ; i <= columnsNumber; i++){
-                    System.out.print(rs.getString(i) + " "); //Print one element of a row
-                }
+                Integer indexPassword = rs.getInt("password_id");
+                String domainName = rs.getString("domain_name");
+                String domainUsername = rs.getString("domain_username");
+                String domainPassword = rs.getString("domain_password");
 
-                System.out.println();//Move to the next line to print the next row.           
-
+                // Create a new HelperDomainObject and add it to the list
+                HelperDomainObject domainObject = new HelperDomainObject(indexPassword, domainName, domainUsername, domainPassword);
+                System.out.printf("[DEBUG] Domain Object: %s%n", domainObject.toString());
+                domainObjects.add(domainObject);
+            
             }
         }
         catch (SQLException e) {
             e.printStackTrace();
         }
+
+        System.out.println("[DEBUG] Finished retrieving data from table: " + TABLE);
+        return domainObjects;
     }
 
-    public void populateUSER_PASSWORDS(String domain_name, String domain_username, String domain_password) throws SQLException {
+    public void populateTABLE(String TABLE, String domain_name, String domain_username, String domain_password) throws SQLException {
         final String populateTABLE = String.format(
         "INSERT INTO %s_pass (domain_name,domain_username,domain_password) " +
         "VALUES(\"%s\", \"%s\", \"%s\");", USER, domain_name, domain_username, domain_password);
@@ -103,6 +113,32 @@ public class ApiDB implements AutoCloseable {
         try (Statement stmt = conn.createStatement()) {
             System.err.println("[DEBUG] Populating TABLE");
             stmt.executeUpdate(populateTABLE);
+        }
+        catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    public void removeTABLEValue(String TABLE, Integer index) throws SQLException {
+        final String deleteTABLE = String.format("DELETE FROM %s WHERE password_id = %d;", TABLE, index);
+
+        try (Statement stmt = conn.createStatement()) {
+            System.err.println("[DEBUG] Deleting from TABLE");
+            stmt.executeUpdate(deleteTABLE);
+        }
+        catch (SQLException e) {
+            throw e;
+        }
+    }
+
+    public void updateTABLEValue(String TABLE, Integer index, String domain_name, String domain_username, String domain_password) throws SQLException {
+        final String updateTABLE = String.format(
+        "UPDATE %s SET domain_name = \"%s\", domain_username = \"%s\", domain_password = \"%s\" " +
+        "WHERE password_id = %d;", TABLE, domain_name, domain_username, domain_password, index);
+
+        try (Statement stmt = conn.createStatement()) {
+            System.err.println("[DEBUG] Updating TABLE");
+            stmt.executeUpdate(updateTABLE);
         }
         catch (SQLException e) {
             throw e;
