@@ -39,7 +39,7 @@ public class EncryptionAlgorithm {
         this.masterKey = masterKey;
     }
 
-    /*
+    /**
      * Encrypts the master key string to create a SecretKeySpec for AES encryption.
      * @param masterKeyString The master key string to encrypt.
      * @return The SecretKeySpec representing the encrypted master key.
@@ -54,7 +54,7 @@ public class EncryptionAlgorithm {
             return customMasterKey;
     }
 
-    /*
+    /**
      * Converts the SecretKey to a Base64 encoded String.
      * @param key The SecretKey to convert.
      * @return The Base64 encoded String representation of the key.
@@ -67,7 +67,7 @@ public class EncryptionAlgorithm {
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
-    /*
+    /**
      * Encrypts the given data using the stored master key.
      * @param data The data to encrypt.
      * @param key The master key used for encryption.
@@ -87,7 +87,7 @@ public class EncryptionAlgorithm {
         return encryptedBase64;
     }
 
-    /*
+    /**
      * Decrypts the given encrypted data using the stored master key.
      * * @param encryptedData The encrypted data to decrypt.
      * * @param key The master key used for decryption.
