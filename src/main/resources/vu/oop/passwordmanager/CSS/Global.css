@@ -23,3 +23,18 @@
     -fx-translate-y: 2px;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 5, 0, 0, 2);
 }
+
+.danger-btn:hover {
+    -fx-background-color: #F44336;
+    -fx-text-fill: black;
+}
+
+.edit-btn:hover {
+    -fx-background-color: #1565C0;
+    -fx-text-fill: white;
+}
+
+.add-btn:hover {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+}

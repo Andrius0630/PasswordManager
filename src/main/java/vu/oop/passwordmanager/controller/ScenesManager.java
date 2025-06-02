@@ -20,19 +20,23 @@ public class ScenesManager {
     public static final String PATH_FXML = PATH + "FXMLFiles/";
     public static final String AUTH_FILE = "Auth";
     public static final String LOGGED_FILE = "Logged";
+    public static final String REGISTER_FILE = "Register";
     public static final String ICONS_PATH = PATH + "icons/";
     public static final String CSS_PATH = PATH + "CSS/";
 
     public static void sceneSwitchToAnotherRoot(ActionEvent event, Parent root) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        String css = ScenesManager.class.getResource(ScenesManager.CSS_PATH + "Global" + ".css").toExternalForm();
+        scene.getStylesheets().add(css);
         stage.show();
     }
     public static void sceneSwitchToAnotherFXML(ActionEvent event, String name) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Parent root = FXMLLoader.load(Objects.requireNonNull(ScenesManager.class.getResource(PATH_FXML + name + ".fxml")));
         Scene scene = new Scene(root);
-        String css = ScenesManager.class.getResource(ScenesManager.CSS_PATH + name + ".css").toExternalForm();
+        String css = ScenesManager.class.getResource(ScenesManager.CSS_PATH + "Global" + ".css").toExternalForm();
         scene.getStylesheets().add(css);
         stage.setScene(scene);
         stage.show();

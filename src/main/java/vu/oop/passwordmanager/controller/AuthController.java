@@ -28,7 +28,7 @@ public class AuthController {
 
 
     @FXML
-    protected void onLoginClick(ActionEvent event) throws IOException {
+    protected void login(ActionEvent event) throws IOException {
         String username = userNameField.getText();
         String password = passwordField.getText();
 
@@ -116,5 +116,10 @@ public class AuthController {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    protected void register(ActionEvent event) throws IOException {
+        ScenesManager.sceneSwitchToAnotherFXML(event, ScenesManager.REGISTER_FILE);
     }
 }

@@ -16,7 +16,6 @@
 
 .button:hover {
     -fx-opacity: 0.9;
-    -fx-background-color: #31353b;
 }
 
 .button:pressed {
