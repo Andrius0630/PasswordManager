@@ -1,6 +1,10 @@
 /**
- * andrius.kolenda@mif.stud.vu.lt
- * Purpose: File for controlling the authorization page
+ * Authorization page controller
+ * Controls the flow from of credentials
+ * Passes credentials to the logged page
+ * @author Andrius Kolenda
+ * @contact: andrius.kolenda@mif.stud.vu.lt
+ * @since 2025-06-04
  */
 
 package vu.oop.passwordmanager.controller;

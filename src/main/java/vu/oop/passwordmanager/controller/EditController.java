@@ -1,6 +1,8 @@
 /**
- * andrius.kolenda@mif.stud.vu.lt
- * Purpose: File for controlling the logged page
+ * Editing of an existing entry page controller
+ * @author Andrius Kolenda
+ * @contact: andrius.kolenda@mif.stud.vu.lt
+ * @since 2025-06-04
  */
 
 package vu.oop.passwordmanager.controller;

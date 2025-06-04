@@ -1,6 +1,10 @@
 /**
- * andrius.kolenda@mif.stud.vu.lt
- * Purpose: File for controlling the logged page
+ * Logged page controller
+ * Displays appropriate name of entries
+ * Has ability to log out or add a new entry
+ * @author Andrius Kolenda
+ * @contact: andrius.kolenda@mif.stud.vu.lt
+ * @since 2025-06-04
  */
 
 package vu.oop.passwordmanager.controller;

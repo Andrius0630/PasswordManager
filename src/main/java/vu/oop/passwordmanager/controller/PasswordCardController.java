@@ -1,6 +1,10 @@
 /**
- * andrius.kolenda@mif.stud.vu.lt
- * Purpose: File for controlling the logged page
+ * Password card controller
+ * Loads appropriate detailed page for information of specific entry
+ * Has ability to delete or edit an existing entry
+ * @author Andrius Kolenda
+ * @contact: andrius.kolenda@mif.stud.vu.lt
+ * @since 2025-06-04
  */
 
 package vu.oop.passwordmanager.controller;

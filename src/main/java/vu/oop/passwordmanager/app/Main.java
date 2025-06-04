@@ -1,6 +1,9 @@
 /**
- * andrius.kolenda@mif.stud.vu.lt
- * Purpose: File for controlling the authorization page
+ * Main file
+ * Opens appropriate authorization page
+ * @author Andrius Kolenda
+ * @contact: andrius.kolenda@mif.stud.vu.lt
+ * @since 2025-06-04
  */
 
 package vu.oop.passwordmanager.app;

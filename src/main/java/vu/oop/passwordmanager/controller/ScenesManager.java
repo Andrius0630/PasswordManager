@@ -1,6 +1,10 @@
 /**
- * andrius.kolenda@mif.stud.vu.lt
- * Purpose: File with helper methods for controlling scenes of UI
+ * Registration page controller
+ * Methods for an easier way of switching scenes
+ * Information and paths for specific FXMLs
+ * @author Andrius Kolenda
+ * @contact: andrius.kolenda@mif.stud.vu.lt
+ * @since 2025-06-04
  */
 
 package vu.oop.passwordmanager.controller;
@@ -21,6 +25,8 @@ public class ScenesManager {
     public static final String AUTH_FILE = "Auth";
     public static final String LOGGED_FILE = "Logged";
     public static final String REGISTER_FILE = "Register";
+    public static final String GLOBAL_FILE = "Global";
+
     public static final String ICONS_PATH = PATH + "icons/";
     public static final String CSS_PATH = PATH + "CSS/";
 
@@ -28,7 +34,7 @@ public class ScenesManager {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
-        String css = ScenesManager.class.getResource(ScenesManager.CSS_PATH + "Global" + ".css").toExternalForm();
+        String css = ScenesManager.class.getResource(ScenesManager.CSS_PATH + GLOBAL_FILE + ".css").toExternalForm();
         scene.getStylesheets().add(css);
         stage.show();
     }
@@ -36,7 +42,7 @@ public class ScenesManager {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Parent root = FXMLLoader.load(Objects.requireNonNull(ScenesManager.class.getResource(PATH_FXML + name + ".fxml")));
         Scene scene = new Scene(root);
-        String css = ScenesManager.class.getResource(ScenesManager.CSS_PATH + "Global" + ".css").toExternalForm();
+        String css = ScenesManager.class.getResource(ScenesManager.CSS_PATH + GLOBAL_FILE + ".css").toExternalForm();
         scene.getStylesheets().add(css);
         stage.setScene(scene);
         stage.show();
