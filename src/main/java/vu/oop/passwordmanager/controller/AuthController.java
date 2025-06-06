@@ -91,6 +91,11 @@ public class AuthController {
                         System.out.println("[DEBUG] Retrieved domain: " + domain);
                     }
 
+                    arrayDomains = db.getTABLE("users");
+                    for (HelperDomainObject domain : arrayDomains) {
+                        System.out.println("[DEBUG] Retrieved users: " + domain);
+                    }
+
                 }
                 else {
                     System.err.println("[DEBUG] ApiDB connection failed upon creation.");

@@ -13,12 +13,14 @@ package vu.oop.passwordmanager.util;
  */
 public class HelperDomainObject implements java.io.Serializable, Cloneable {
     private Integer index;
+    private String entryName;
     private String domainName;
     private String domainUsername;
     private String domainPassword;
 
-    public HelperDomainObject(Integer index, String domainName, String domainUsername, String domainPassword) {
+    public HelperDomainObject(Integer index, String entryName, String domainName, String domainUsername, String domainPassword) {
         this.index = index;
+        this.entryName = entryName;
         this.domainName = domainName;
         this.domainUsername = domainUsername;
         this.domainPassword = domainPassword;
@@ -26,6 +28,10 @@ public class HelperDomainObject implements java.io.Serializable, Cloneable {
 
     public Integer getIndex() {
         return index;
+    }
+
+    public String getEntryName() {
+        return entryName;
     }
 
     public String getDomainName() {
@@ -44,6 +50,10 @@ public class HelperDomainObject implements java.io.Serializable, Cloneable {
         this.index = index;
     }
 
+    public void setEntryName(String entryName) {
+        this.entryName = entryName;
+    }
+
     public void setDomainUsername(String domainUsername) {
         this.domainUsername = domainUsername;
     }
@@ -60,6 +70,7 @@ public class HelperDomainObject implements java.io.Serializable, Cloneable {
     public String toString() {
         return "HelperDomainObject{" +
                 "index=" + index +
+                ", entryName='" + entryName + '\'' +
                 ", domainName='" + domainName + '\'' +
                 ", domainUsername='" + domainUsername + '\'' +
                 ", domainPassword='" + domainPassword + '\'' +

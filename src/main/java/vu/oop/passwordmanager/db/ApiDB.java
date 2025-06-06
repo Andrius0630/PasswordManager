@@ -101,6 +101,7 @@ public class ApiDB implements AutoCloseable {
         final String createUser_PasswordsTABLE = String.format(
             "CREATE TABLE IF NOT EXISTS \"%s_pass\" (" +
             "password_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+            "entry_name TEXT," +
             "domain_name TEXT NOT NULL," +
             "domain_username TEXT NOT NULL," +
             "domain_password TEXT NOT NULL);", sanitizedUserHashTableName);
@@ -152,34 +153,47 @@ public class ApiDB implements AutoCloseable {
      */
     public ArrayList<HelperDomainObject> getTABLE(String TABLE) throws SQLException {
         ArrayList<HelperDomainObject> domainObjects = new ArrayList<>();
-        // Sanitize the TABLE string for use in table names
         String sanitizedTableName = getSanitizedTableName(TABLE);
 
-        // Quote the table name for retrieval
-        String selectSQL = String.format("SELECT * FROM \"%s\"", sanitizedTableName);
+        // If requesting the "users" table, do not sanitize and use a different mapping
+        boolean isUsersTable = "users".equals(TABLE);
 
-        try(Statement stmt = conn.createStatement()) {
+        String selectSQL = isUsersTable
+            ? "SELECT * FROM \"users\""
+            : String.format("SELECT * FROM \"%s\"", sanitizedTableName);
+
+        try (Statement stmt = conn.createStatement()) {
             ResultSet rs = stmt.executeQuery(selectSQL);
 
-            // Iterate through the data in the result set and insert into arraylist.
             while (rs.next()) {
-                Integer indexPassword = rs.getInt("password_id");
-                String domainName = rs.getString("domain_name");
-                String domainUsername = rs.getString("domain_username");
-                String domainPassword = rs.getString("domain_password");
+                if (isUsersTable) {
+                    // users table: user_id, user_name, user_password
+                    Integer userId = rs.getInt("user_id");
+                    String userName = rs.getString("user_name");
+                    String userPassword = rs.getString("user_password");
+                    HelperDomainObject domainObject = new HelperDomainObject(userId, null, userName, userPassword, null);
+                    System.out.printf("[DEBUG] User Object: %s%n", domainObject.toString());
+                    domainObjects.add(domainObject);
+                } else {
+                    // password table: password_id, entry_name, domain_name, domain_username, domain_password
+                    Integer indexPassword = rs.getInt("password_id");
+                    String entryName = rs.getString("entry_name");
+                    String domainName = rs.getString("domain_name");
+                    String domainUsername = rs.getString("domain_username");
+                    String domainPassword = rs.getString("domain_password");
 
-                HelperDomainObject domainObject = new HelperDomainObject(indexPassword, domainName, domainUsername, domainPassword);
-                System.out.printf("[DEBUG] Domain Object: %s%n", domainObject.toString());
-                domainObjects.add(domainObject);
+                    HelperDomainObject domainObject = new HelperDomainObject(indexPassword, entryName, domainName, domainUsername, domainPassword);
+                    System.out.printf("[DEBUG] Domain Object: %s%n", domainObject.toString());
+                    domainObjects.add(domainObject);
+                }
             }
-        }
-        catch (SQLException e) {
-            System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB (getTABLE for " + sanitizedTableName + "_pass):");
+        } catch (SQLException e) {
+            System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB (getTABLE for " + (isUsersTable ? "users" : sanitizedTableName + "_pass") + "):");
             e.printStackTrace();
             throw e;
         }
 
-        System.out.println("[DEBUG] Finished retrieving data from table: " + sanitizedTableName + "_pass");
+        System.out.println("[DEBUG] Finished retrieving data from table: " + (isUsersTable ? "users" : sanitizedTableName + "_pass"));
         return domainObjects;
     }
 
