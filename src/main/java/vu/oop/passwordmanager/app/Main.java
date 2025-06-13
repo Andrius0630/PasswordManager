@@ -33,7 +33,7 @@ public class Main extends Application {
             stage.setTitle("Password manager app");
             Scene scene = new Scene(root);
 
-            String css = this.getClass().getResource(ScenesManager.CSS_PATH + "Auth" + ".css").toExternalForm();
+            String css = this.getClass().getResource(ScenesManager.CSS_PATH + "Global" + ".css").toExternalForm();
             scene.getStylesheets().add(css);
 
             stage.setScene(scene);

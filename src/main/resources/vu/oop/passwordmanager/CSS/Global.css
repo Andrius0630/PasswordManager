@@ -38,3 +38,12 @@
     -fx-background-color: green;
     -fx-text-fill: white;
 }
+
+.warning-text{
+    -fx-text-fill: red;
+}
+
+.selectable-text{
+    -fx-text-fill: #00ADB5;
+    -fx-background-color: none;
+}

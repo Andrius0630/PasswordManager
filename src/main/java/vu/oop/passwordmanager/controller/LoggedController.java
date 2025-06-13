@@ -24,25 +24,23 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import vu.oop.passwordmanager.service.EncryptionAlgorithm;
+import vu.oop.passwordmanager.util.HelperDB;
+import vu.oop.passwordmanager.util.HelperDomainObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 public class LoggedController implements Initializable {
     @FXML private Label usernameLabelTEMP;
     @FXML private Label passwordLabelTEMP;
-    @FXML private ListView<String> entiresList;
+    @FXML private ListView<String> entriesList;
     @FXML private HBox entriesView;
-
-    String[] testEntries = {
-            "entry_1",
-            "entry_2",
-            "entry_3",
-            "entry_4",
-            "entry_5",
-            "entry_6"
-    };
+    private ArrayList<HelperDomainObject> passwordEntries;
+    private ArrayList<String> reservedNames;
+    private Stage passwordGeneratorStage;
 
 
     @FXML
@@ -55,6 +53,18 @@ public class LoggedController implements Initializable {
         passwordLabelTEMP.setText(password);
     }
 
+    protected void rememberEntriesList(ArrayList<HelperDomainObject> list) {
+        passwordEntries = list;
+        for (HelperDomainObject entry : passwordEntries) {
+            String entryName = entry.getEntryName();
+            if (entryName != null) {
+                entriesList.getItems().add(entryName);
+                continue;
+            }
+            entriesList.getItems().add("entry");
+        }
+    }
+
     @FXML
     protected void logout(ActionEvent event) throws IOException {
         ScenesManager.sceneSwitchToAnotherFXML(event, ScenesManager.AUTH_FILE);
@@ -62,9 +72,18 @@ public class LoggedController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        entiresList.getItems().addAll(testEntries);
+        passwordEntries = HelperDB.retrieveUserData();
+        if (passwordEntries == null)
+            throw new NoSuchElementException();
 
-        entiresList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+        reservedNames = new ArrayList<>();
+        for (HelperDomainObject entry : passwordEntries) {
+            entriesList.getItems().add(entry.getEntryName());
+            reservedNames.add(entry.getEntryName());
+        }
+
+
+        entriesList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + "PasswordCard" + ".fxml"));
@@ -75,12 +94,15 @@ public class LoggedController implements Initializable {
                     throw new RuntimeException(e);
                 }
                 PasswordCardController card = loader.getController();
-                String currName = entiresList.getSelectionModel().getSelectedItem();
-                card.displayName(currName);
-                card.displayUsername(currName);
-                card.displayPasswd(currName);
+                int index = entriesList.getSelectionModel().getSelectedIndex();
+                card.displayName(passwordEntries.get(index).getEntryName());
+                card.displayUsername(passwordEntries.get(index).getDomainUsername());
+                card.displayPasswd(passwordEntries.get(index).getDomainPassword());
                 card.displayStrength(0.32);
-                card.displayWebsite(currName);
+                card.displayWebsite(passwordEntries.get(index).getDomainName());
+                card.setIndex(passwordEntries.get(index).getIndex());
+                card.setReservedNames(reservedNames);
+
 
                 loadedDetailedView.setStyle("-fx-border-color: #393E46; -fx-border-width: 5px 5px 5px 5px");
                 if (entriesView.getChildren().size() > 1)
@@ -93,6 +115,28 @@ public class LoggedController implements Initializable {
 
     @FXML
     protected void addNew(ActionEvent event) throws IOException {
-        ScenesManager.sceneSwitchToAnotherFXML(event, "Add");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + "Add" + ".fxml"));
+        Parent root = loader.load();
+        AddController addController = loader.getController();
+        addController.setReservedNames(reservedNames);
+        ScenesManager.sceneSwitchToAnotherRoot(event, root);
+    }
+
+    @FXML
+    protected void openPasswdGenerator(ActionEvent event) throws IOException {
+        System.out.println("Clicked!");
+//        if (passwordGeneratorStage != null && passwordGeneratorStage.isShowing()) {
+//            passwordGeneratorStage.toFront();
+//        } else {
+//            FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + "PasswordGenerator" + ".fxml"));
+//            Parent root = loader.load();
+//
+//            passwordGeneratorStage = new Stage();
+//            passwordGeneratorStage.setScene(new Scene(root));
+//            passwordGeneratorStage.setTitle("Password Generator");
+//            passwordGeneratorStage.show();
+//
+//            passwordGeneratorStage.setOnCloseRequest(e -> passwordGeneratorStage = null);
+//        }
     }
 }

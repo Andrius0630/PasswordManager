@@ -133,6 +133,7 @@ public class ApiDB implements AutoCloseable {
                 else {
                     System.err.println("[DEBUG] Error creating tables or inserting user: " + e.getMessage());
                 }
+                throw e;
             }
             else {
                 System.err.println("[DEBUG] Unmanaged error during table creation. Error: " + e.getErrorCode());
@@ -172,7 +173,7 @@ public class ApiDB implements AutoCloseable {
                     String userName = rs.getString("user_name");
                     String userPassword = rs.getString("user_password");
                     HelperDomainObject domainObject = new HelperDomainObject(userId, null, userName, userPassword, null);
-                    System.out.printf("[DEBUG] User Object: %s%n", domainObject.toString());
+                    //System.out.printf("[DEBUG] User Object: %s%n", domainObject.toString());
                     domainObjects.add(domainObject);
                 } else {
                     // password table: password_id, entry_name, domain_name, domain_username, domain_password

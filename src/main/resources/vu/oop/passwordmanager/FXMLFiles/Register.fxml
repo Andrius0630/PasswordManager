@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" styleClass="root-pane" stylesheets="@../CSS/Global.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vu.oop.passwordmanager.controller.RegisterController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" styleClass="root-pane" stylesheets="@../CSS/Global.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vu.oop.passwordmanager.controller.RegisterController">
    <children>
       <Label alignment="CENTER" layoutY="14.0" prefHeight="52.0" prefWidth="500.0" stylesheets="@../CSS/Register.css" text="Register a new user">
          <font>
@@ -19,24 +19,24 @@
       </Label>
       <VBox layoutX="102.0" layoutY="85.0" prefHeight="200.0" prefWidth="296.0" spacing="17.0">
          <children>
-            <TextField promptText="Username">
+            <TextField fx:id="userNameField" promptText="Username">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <TextField promptText="Password">
+            <TextField fx:id="passwordField" promptText="Password">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
-            <TextField promptText="Repeat password">
+            <TextField fx:id="passwordField2" promptText="Repeat password">
                <font>
                   <Font size="24.0" />
                </font>
             </TextField>
             <StackPane prefHeight="150.0" prefWidth="200.0">
                <children>
-                  <Button mnemonicParsing="false" prefHeight="30.0" prefWidth="120.0" text="Register">
+                  <Button mnemonicParsing="false" onAction="#register" prefHeight="30.0" prefWidth="120.0" text="Register">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
@@ -57,5 +57,20 @@
             </Button>
          </children>
       </HBox>
+      <Label fx:id="emptyFieldsText" alignment="CENTER" layoutY="341.0" prefHeight="25.0" prefWidth="500.0" styleClass="warning-text" text="Username or password can't be empty!" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="fieldsNotTheSameText" alignment="CENTER" layoutY="341.0" prefHeight="25.0" prefWidth="500.0" styleClass="warning-text" text="Password mismatch!" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
+      <Label fx:id="userExistsText" alignment="CENTER" layoutY="341.0" prefHeight="25.0" prefWidth="500.0" styleClass="warning-text" text="User already exists!" visible="false">
+         <font>
+            <Font name="System Bold" size="13.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

@@ -9,6 +9,8 @@
 
 package vu.oop.passwordmanager.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -38,6 +40,7 @@ public class ScenesManager {
         scene.getStylesheets().add(css);
         stage.show();
     }
+
     public static void sceneSwitchToAnotherFXML(ActionEvent event, String name) throws IOException {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Parent root = FXMLLoader.load(Objects.requireNonNull(ScenesManager.class.getResource(PATH_FXML + name + ".fxml")));
