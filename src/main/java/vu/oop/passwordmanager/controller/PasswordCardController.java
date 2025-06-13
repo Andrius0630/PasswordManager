@@ -44,21 +44,21 @@ public class PasswordCardController {
 
     protected void displayUsername(String username) {
         if (username == null || username.isBlank())
-            this.username.setText("username_placeholder");
+            this.username.setText("none");
         else
             this.username.setText(username);
     }
 
     protected void displayPasswd(String passwd) {
         if (passwd == null || passwd.isBlank())
-            this.password.setText("passwd_placeholder");
+            this.password.setText("none");
         else
             this.password.setText(passwd);
     }
 
     protected void displayWebsite(String website) {
         if (website == null || website.isBlank())
-            this.website.setText("website_placeholder");
+            this.website.setText("none");
         else
             this.website.setText(website);
     }

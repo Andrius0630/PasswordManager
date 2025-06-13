@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="500.0" styleClass="root-pane" stylesheets="@../CSS/Global.css" xmlns="http://javafx.com/javafx/24" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vu.oop.passwordmanager.controller.AddController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="470.0" prefWidth="500.0" styleClass="root-pane" stylesheets="@../CSS/Global.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vu.oop.passwordmanager.controller.AddController">
    <children>
-      <Label alignment="CENTER" layoutY="14.0" prefHeight="52.0" prefWidth="500.0" stylesheets="@../CSS/Register.css" text="Adding new entry">
+      <Label alignment="CENTER" layoutY="14.0" prefHeight="52.0" prefWidth="500.0" text="Adding new entry">
          <font>
             <Font name="System Bold" size="36.0" />
          </font>
