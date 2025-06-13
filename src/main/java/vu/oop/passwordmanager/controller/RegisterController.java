@@ -45,10 +45,6 @@ public class RegisterController {
             return;
         }
 
-//        db.populateTABLE(username + "_pass",                                                        // Table to populate
-//                new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},   // Column names
-//                new String[] {"entry1", "youtube.com", "Username222",     "Password456"}            // Values to insert
-//        );
 
         EncryptionAlgorithm crypt;
         try {

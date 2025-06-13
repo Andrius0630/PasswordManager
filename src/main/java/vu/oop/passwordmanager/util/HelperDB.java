@@ -9,13 +9,15 @@ public class HelperDB {
 
     private static String usernameLogged;
     private static String passwordLogged;
+    private static int userID;
 
-    public static void saveValidUserCredentialsToMemory(String encodedUsername, String encodedPassword) {
+    public static void saveValidUserCredentialsToMemory(String encodedUsername, String encodedPassword, int newUserID) {
         usernameLogged = encodedUsername;
         passwordLogged = encodedPassword;
+        userID = newUserID;
     }
 
-    public static boolean isUserExist(String encodedUsername, String encodedPassword) {
+    public static int isUserExist(String encodedUsername, String encodedPassword) {
         if (encodedUsername.isBlank() || encodedPassword.isBlank())
             throw new IllegalArgumentException();
         try {
@@ -24,8 +26,8 @@ public class HelperDB {
                     System.out.println("[DEBUG] ApiDB instance created and connected.");
                     ArrayList<HelperDomainObject> users = db.getTABLE("users");
                     for (HelperDomainObject user : users) {
-                        if (user.getDomainUsername().equals(encodedUsername) && user.getDomainUsername().equals(encodedPassword))
-                            return true;
+                        if (user.getDomainName().equals(encodedUsername) && user.getDomainUsername().equals(encodedPassword))
+                            return user.getIndex();
                     }
                 } else {
                     System.err.println("[DEBUG] ApiDB connection failed upon creation.");
@@ -45,8 +47,7 @@ public class HelperDB {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return false;
+        return 0;
     }
 
     public static ArrayList<HelperDomainObject> retrieveUserData() {
@@ -93,7 +94,7 @@ public class HelperDB {
                             "password_id",                              // Column where the ID is stored
                             index,                                             // ID of the row to update
                             new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},     // Columns to update
-                            new String[] {name, website, password, username}       // New values for the columns
+                            new String[] {name, website, username, password}       // New values for the columns
                     );
 
                 } else {
@@ -156,6 +157,35 @@ public class HelperDB {
                     System.out.println("[DEBUG] ApiDB instance created and connected.");
 
                     db.removeTABLEValue(usernameLogged + "_pass", "password_id", index);
+
+                } else {
+                    System.err.println("[DEBUG] ApiDB connection failed upon creation.");
+                }
+            } catch (SQLException e) {
+                System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB:");
+                if (e.getErrorCode()==19) {
+                    // CONTROLLER CODE TO INFORM USER OF ERROR [ERROR: NOT UNIQUE] // FRONTEND TODO
+                    // ... //
+                    // ... //
+                } else e.printStackTrace();
+            } catch (Exception e) {
+                System.err.println("[DEBUG] An unexpected exception occurred:");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteUser() {
+        if (usernameLogged == null || passwordLogged == null)
+            throw new IllegalStateException();
+        try {
+            try (ApiDB db = new ApiDB(usernameLogged, passwordLogged)) {
+                if (db.getConnection() != null) {
+                    System.out.println("[DEBUG] ApiDB instance created and connected.");
+
+                    db.removeTABLEValue("users", "user_id", userID);
 
                 } else {
                     System.err.println("[DEBUG] ApiDB connection failed upon creation.");

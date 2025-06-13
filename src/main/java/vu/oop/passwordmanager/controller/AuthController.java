@@ -54,14 +54,14 @@ public class AuthController {
             String encodedUsername = crypt.encrypt(username);
             String encodedPassword = crypt.encrypt(password);
 
-
-            if (!HelperDB.isUserExist(encodedUsername, encodedPassword)) {
+            int userId = HelperDB.isUserExist(encodedUsername, encodedPassword);
+            if (userId == 0) {
                 emptyFieldsText.setVisible(false);
                 nonExistentUserText.setVisible(true);
                 return;
             }
 
-            HelperDB.saveValidUserCredentialsToMemory(encodedUsername, encodedPassword);
+            HelperDB.saveValidUserCredentialsToMemory(encodedUsername, encodedPassword, userId);
         }
         catch (Exception e) {
             e.printStackTrace();

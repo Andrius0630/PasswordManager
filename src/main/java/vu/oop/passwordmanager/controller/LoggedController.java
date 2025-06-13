@@ -67,6 +67,8 @@ public class LoggedController implements Initializable {
 
     @FXML
     protected void logout(ActionEvent event) throws IOException {
+        if (passwordGeneratorStage != null)
+            passwordGeneratorStage.close();
         ScenesManager.sceneSwitchToAnotherFXML(event, ScenesManager.AUTH_FILE);
     }
 
@@ -124,19 +126,23 @@ public class LoggedController implements Initializable {
 
     @FXML
     protected void openPasswdGenerator(ActionEvent event) throws IOException {
-        System.out.println("Clicked!");
-//        if (passwordGeneratorStage != null && passwordGeneratorStage.isShowing()) {
-//            passwordGeneratorStage.toFront();
-//        } else {
-//            FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + "PasswordGenerator" + ".fxml"));
-//            Parent root = loader.load();
-//
-//            passwordGeneratorStage = new Stage();
-//            passwordGeneratorStage.setScene(new Scene(root));
-//            passwordGeneratorStage.setTitle("Password Generator");
-//            passwordGeneratorStage.show();
-//
-//            passwordGeneratorStage.setOnCloseRequest(e -> passwordGeneratorStage = null);
-//        }
+        if (passwordGeneratorStage != null && passwordGeneratorStage.isShowing()) {
+            passwordGeneratorStage.toFront();
+        } else {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + "PasswordGenerator" + ".fxml"));
+            Parent root = loader.load();
+
+            passwordGeneratorStage = new Stage();
+            passwordGeneratorStage.setScene(new Scene(root));
+            passwordGeneratorStage.setTitle("Password Generator");
+            passwordGeneratorStage.show();
+
+            passwordGeneratorStage.setOnCloseRequest(e -> passwordGeneratorStage = null);
+        }
+    }
+
+    @FXML
+    protected void deleteUser(ActionEvent event) throws IOException {
+        ScenesManager.sceneSwitchToAnotherFXML(event, "UserDeletionPrompt");
     }
 }
