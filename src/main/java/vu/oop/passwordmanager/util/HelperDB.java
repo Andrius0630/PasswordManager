@@ -32,13 +32,7 @@ public class HelperDB {
                     System.err.println("[DEBUG] ApiDB connection failed upon creation.");
                 }
             } catch (SQLException e) {
-                System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB:");
-                if (e.getErrorCode()==19) {
-                    // CONTROLLER CODE TO INFORM USER OF ERROR [ERROR: NOT UNIQUE] // FRONTEND TODO
-                    // ... //
-                    // ... //
-                }
-                else e.printStackTrace();
+                return 0;
             } catch (Exception e) {
                 System.err.println("[DEBUG] An unexpected exception occurred:");
                 e.printStackTrace();

@@ -62,12 +62,12 @@ public class RegisterController {
 
                     db.populateTABLE(username + "_pass",
                             new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},
-                            new String[] {"Test_entry_1", "test_website_1.com", "test_username_1", "test_password_1"}
+                            new String[] {"Saved_entry_1", "your_website_1.com", "your_username_1", "your_password_1"}
                     );
 
                     db.populateTABLE(username + "_pass",
                             new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},
-                            new String[] {"Test_entry_2", "test_website_2.com", "test_username_2", "test_password_2"}
+                            new String[] {"Saved_entry_2", "your_website_2.com", "your_username_2", "your_password_2"}
                     );
                 }
                 else {

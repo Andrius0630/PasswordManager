@@ -59,12 +59,14 @@ public class AuthController {
                 emptyFieldsText.setVisible(false);
                 nonExistentUserText.setVisible(true);
                 return;
-            }
+            } else
+                HelperDB.saveValidUserCredentialsToMemory(encodedUsername, encodedPassword, userId);
 
-            HelperDB.saveValidUserCredentialsToMemory(encodedUsername, encodedPassword, userId);
+
         }
         catch (Exception e) {
             e.printStackTrace();
+
         }
         FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + ScenesManager.LOGGED_FILE + ".fxml"));
         Parent root = loader.load();

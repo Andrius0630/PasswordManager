@@ -189,8 +189,8 @@ public class ApiDB implements AutoCloseable {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB (getTABLE for " + (isUsersTable ? "users" : sanitizedTableName + "_pass") + "):");
-            e.printStackTrace();
+            //System.err.println("[DEBUG] An SQL exception occurred during or after using ApiDB (getTABLE for " + (isUsersTable ? "users" : sanitizedTableName + "_pass") + "):");
+            //e.printStackTrace();
             throw e;
         }
 
