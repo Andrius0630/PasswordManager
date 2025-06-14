@@ -23,7 +23,6 @@ public class HelperDB {
         try {
             try (ApiDB db = new ApiDB(encodedUsername, encodedPassword)) {
                 if (db.getConnection() != null) {
-                    System.out.println("[DEBUG] ApiDB instance created and connected.");
                     ArrayList<HelperDomainObject> users = db.getTABLE("users");
                     for (HelperDomainObject user : users) {
                         if (user.getDomainName().equals(encodedUsername) && user.getDomainUsername().equals(encodedPassword))
@@ -56,7 +55,6 @@ public class HelperDB {
         try {
             try (ApiDB db = new ApiDB(usernameLogged, passwordLogged)) {
                 if (db.getConnection() != null) {
-                    System.out.println("[DEBUG] ApiDB instance created and connected.");
 
                     return db.getTABLE(usernameLogged + "_pass");
 
@@ -87,7 +85,6 @@ public class HelperDB {
         try {
             try (ApiDB db = new ApiDB(usernameLogged, passwordLogged)) {
                 if (db.getConnection() != null) {
-                    System.out.println("[DEBUG] ApiDB instance created and connected.");
 
                     db.updateTABLEValue(
                             usernameLogged + "_pass",                                  // Table to update
@@ -122,7 +119,6 @@ public class HelperDB {
         try {
             try (ApiDB db = new ApiDB(usernameLogged, passwordLogged)) {
                 if (db.getConnection() != null) {
-                    System.out.println("[DEBUG] ApiDB instance created and connected.");
 
                     db.populateTABLE(usernameLogged + "_pass",
                             new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},
@@ -154,7 +150,6 @@ public class HelperDB {
         try {
             try (ApiDB db = new ApiDB(usernameLogged, passwordLogged)) {
                 if (db.getConnection() != null) {
-                    System.out.println("[DEBUG] ApiDB instance created and connected.");
 
                     db.removeTABLEValue(usernameLogged + "_pass", "password_id", index);
 
@@ -183,7 +178,6 @@ public class HelperDB {
         try {
             try (ApiDB db = new ApiDB(usernameLogged, passwordLogged)) {
                 if (db.getConnection() != null) {
-                    System.out.println("[DEBUG] ApiDB instance created and connected.");
 
                     db.removeTABLEValue("users", "user_id", userID);
 

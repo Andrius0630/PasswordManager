@@ -6,6 +6,7 @@ module vu.oop.passwordmanager {
 
     requires java.sql;
     requires org.slf4j;
+    requires me.gosimple.nbvcxz;
     exports vu.oop.passwordmanager.app;
     opens vu.oop.passwordmanager.app to javafx.fxml;
     exports vu.oop.passwordmanager.controller;

@@ -12,24 +12,31 @@ package vu.oop.passwordmanager.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import me.gosimple.nbvcxz.Nbvcxz;
+import me.gosimple.nbvcxz.scoring.Result;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
-public class PasswordCardController {
+public class PasswordCardController implements Initializable {
     @FXML private Label name;
     @FXML private TextField username;
     @FXML private TextField password;
     @FXML private TextField website;
     @FXML private ProgressBar strength;
+    @FXML private Label meter;
     private int index;
     private ArrayList<String> reservedNames;
+    private Nbvcxz nbvcxz;
 
     public void setReservedNames(ArrayList<String> reservedNames) {
         this.reservedNames = reservedNames;
@@ -45,28 +52,62 @@ public class PasswordCardController {
     protected void displayUsername(String username) {
         if (username == null || username.isBlank())
             this.username.setText("none");
-        else
+        else {
             this.username.setText(username);
+            this.username.setVisible(true);
+        }
     }
 
     protected void displayPasswd(String passwd) {
         if (passwd == null || passwd.isBlank())
             this.password.setText("none");
-        else
+        else {
             this.password.setText(passwd);
+            this.password.setVisible(true);
+            displayStrength(password.getText());
+        }
+
     }
 
     protected void displayWebsite(String website) {
         if (website == null || website.isBlank())
             this.website.setText("none");
-        else
+        else {
             this.website.setText(website);
+            this.website.setVisible(true);
+        }
     }
 
-    protected void displayStrength(double strength) {
-        if (strength < 0 || strength > 1)
-            throw new IllegalArgumentException();
-        this.strength.setProgress(strength);
+    private void displayStrength(String targetPasswd) {
+        if (nbvcxz == null)
+            nbvcxz = new Nbvcxz();
+        Result result = nbvcxz.estimate(targetPasswd);
+        double strengthScore = result.getEntropy();
+        double maxEntropyForProgressBar = 100.0;
+        double progress = Math.min(1.0, strengthScore / maxEntropyForProgressBar);
+
+        strength.setProgress(progress);
+
+        String strengthText;
+        if (strengthScore < 20) {
+            strengthText = "Very Weak";
+            strength.setStyle("-fx-accent: red;");
+        } else if (strengthScore < 40) {
+            strengthText = "Weak";
+            strength.setStyle("-fx-accent: orangered;");
+        } else if (strengthScore < 60) {
+            strengthText = "Moderate";
+            strength.setStyle("-fx-accent: orange;");
+        } else if (strengthScore < 80) {
+            strengthText = "Good";
+            strength.setStyle("-fx-accent: yellowgreen;");
+        } else {
+            strengthText = "Strong";
+            strength.setStyle("-fx-accent: green;");
+        }
+        this.meter.setText(strengthText + String.format(" (%.2f score)", strengthScore));
+        this.meter.setVisible(true);
+        this.strength.setVisible(true);
     }
 
     protected void setIndex(int newIndex) {
@@ -106,12 +147,8 @@ public class PasswordCardController {
         ScenesManager.sceneSwitchToAnotherRoot(event, root);
     }
 
-    public void copyPassword(ActionEvent event) {
-    }
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
 
-    public void copyWebsite(ActionEvent event) {
-    }
-
-    public void copyUsername(ActionEvent event) {
     }
 }

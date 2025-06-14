@@ -34,36 +34,11 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 public class LoggedController implements Initializable {
-    @FXML private Label usernameLabelTEMP;
-    @FXML private Label passwordLabelTEMP;
     @FXML private ListView<String> entriesList;
     @FXML private HBox entriesView;
     private ArrayList<HelperDomainObject> passwordEntries;
     private ArrayList<String> reservedNames;
     private Stage passwordGeneratorStage;
-
-
-    @FXML
-    protected void displayName(String username, String usernameEncrypted) {
-        usernameLabelTEMP.setText("Welcome, " + username + " (" + usernameEncrypted + ")");
-    }
-
-    @FXML
-    protected void displayPassword(String password) {
-        passwordLabelTEMP.setText(password);
-    }
-
-    protected void rememberEntriesList(ArrayList<HelperDomainObject> list) {
-        passwordEntries = list;
-        for (HelperDomainObject entry : passwordEntries) {
-            String entryName = entry.getEntryName();
-            if (entryName != null) {
-                entriesList.getItems().add(entryName);
-                continue;
-            }
-            entriesList.getItems().add("entry");
-        }
-    }
 
     @FXML
     protected void logout(ActionEvent event) throws IOException {
@@ -100,7 +75,6 @@ public class LoggedController implements Initializable {
                 card.displayName(passwordEntries.get(index).getEntryName());
                 card.displayUsername(passwordEntries.get(index).getDomainUsername());
                 card.displayPasswd(passwordEntries.get(index).getDomainPassword());
-                card.displayStrength(0.32);
                 card.displayWebsite(passwordEntries.get(index).getDomainName());
                 card.setIndex(passwordEntries.get(index).getIndex());
                 card.setReservedNames(reservedNames);

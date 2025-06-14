@@ -48,6 +48,8 @@ public class EditController {
     }
 
     public void setName(String name) {
+        if (name.isBlank())
+            throw new IllegalArgumentException();
         this.name.setText(name);
     }
 
@@ -56,7 +58,10 @@ public class EditController {
     }
 
     public void setUsername(String username) {
-        this.username.setText(username);
+        if (username.compareTo("none") == 0)
+            this.username.setText("");
+        else
+            this.username.setText(username);
     }
 
     public String getPassword() {
@@ -64,15 +69,22 @@ public class EditController {
     }
 
     public void setPassword(String password) {
-        this.password.setText(password);
+        if (password.compareTo("none") == 0)
+            this.password.setText("");
+        else
+            this.password.setText(password);
+    }
+
+
+    public void setWebsite(String website) {
+        if (website.compareTo("none") == 0)
+            this.website.setText("");
+        else
+            this.website.setText(website);
     }
 
     public String getWebsite() {
         return website.getText();
-    }
-
-    public void setWebsite(String website) {
-        this.website.setText(website);
     }
     @FXML
     protected void update(ActionEvent event) throws IOException {
@@ -104,14 +116,5 @@ public class EditController {
     @FXML
     protected void goBack(ActionEvent event) throws IOException {
         ScenesManager.sceneSwitchToAnotherFXML(event, ScenesManager.LOGGED_FILE);
-
-//        Node source = (Node) event.getSource();
-//        Stage stage = (Stage) source.getScene().getWindow();
-//        stage.close();
-
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + ScenesManager.LOGGED_FILE + ".fxml"));
-//        Parent root = loader.load();
-//        LoggedController loggedController = loader.getController();
-//        ScenesManager.sceneSwitchToAnotherRoot(event, root);
     }
 }

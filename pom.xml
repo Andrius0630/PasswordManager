@@ -6,13 +6,24 @@
 
     <groupId>vu.oop</groupId>
     <artifactId>PasswordManager</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <name>PasswordManager</name>
 
     <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>5.10.2</junit.version>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>jitpack</id>
+            <name>jitpack</name>
+            <url>https://jitpack.io/</url>
+        </repository>
+
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -57,7 +68,13 @@
             <artifactId>slf4j-simple</artifactId>
             <version>2.0.9</version>
         <scope>runtime</scope>
-    </dependency>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.GoSimpleLLC/nbvcxz -->
+        <dependency>
+            <groupId>com.github.GoSimpleLLC</groupId>
+            <artifactId>nbvcxz</artifactId>
+            <version>1.5.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -81,12 +98,35 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>vu.oop.passwordmanager/vu.oop.passwordmanager.app.Main</mainClass>
-                            <launcher>app</launcher>
-                            <jlinkZipName>app</jlinkZipName>
-                            <jlinkImageName>app</jlinkImageName>
+                            <launcher>PasswordManager</launcher>
+                            <jlinkZipName>PasswordManager</jlinkZipName>
+                            <jlinkImageName>PasswordManager</jlinkImageName>
                             <noManPages>true</noManPages>
                             <stripDebug>true</stripDebug>
                             <noHeaderFiles>true</noHeaderFiles>
+
+                            <jpackageAppImageName>PasswordManager</jpackageAppImageName>
+                            <jpackageInstallerName>PasswordManager</jpackageInstallerName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>vu.oop.passwordmanager.app.Main</mainClass>
+                                </transformer>
+                            </transformers>
                         </configuration>
                     </execution>
                 </executions>
