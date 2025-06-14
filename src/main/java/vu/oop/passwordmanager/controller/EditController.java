@@ -53,19 +53,11 @@ public class EditController {
         this.name.setText(name);
     }
 
-    public String getUsername() {
-        return username.getText();
-    }
-
     public void setUsername(String username) {
         if (username.compareTo("none") == 0)
             this.username.setText("");
         else
             this.username.setText(username);
-    }
-
-    public String getPassword() {
-        return password.getText();
     }
 
     public void setPassword(String password) {
@@ -83,9 +75,6 @@ public class EditController {
             this.website.setText(website);
     }
 
-    public String getWebsite() {
-        return website.getText();
-    }
     @FXML
     protected void update(ActionEvent event) throws Exception {
         String newName = name.getText();

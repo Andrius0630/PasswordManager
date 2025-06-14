@@ -117,7 +117,7 @@ public class PasswordCardController implements Initializable {
 
     @FXML
     protected void editEntry(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + "Edit" + ".fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + ScenesManager.EDIT_FILE + ".fxml"));
         Parent root = loader.load();
         EditController editController = loader.getController();
         editController.setName(name.getText());
@@ -138,7 +138,7 @@ public class PasswordCardController implements Initializable {
 
     @FXML
     protected void deleteEntry(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + "DeletionPrompt" + ".fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(ScenesManager.PATH_FXML + ScenesManager.DEL_PRMPT_FILE + ".fxml"));
         Parent root = loader.load();
         DeletionPromptController deletionPromptController = loader.getController();
         deletionPromptController.setDeletionIndex(index);

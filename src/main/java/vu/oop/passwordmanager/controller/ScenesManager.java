@@ -26,6 +26,11 @@ public class ScenesManager {
     public static final String LOGGED_FILE = "Logged";
     public static final String REGISTER_FILE = "Register";
     public static final String GLOBAL_FILE = "Global";
+    public static final String ADD_FILE = "Add";
+    public static final String EDIT_FILE = "Edit";
+    public static final String DEL_PRMPT_FILE = "DeletionPrompt";
+    public static final String USR_DEL_PRMPT_FILE = "UserDeletionPrompt";
+    public static final String PASSWD_GENERATOR_FILE = "PasswordGenerator";
 
     public static final String ICONS_PATH = PATH + "icons/";
     public static final String CSS_PATH = PATH + "CSS/";

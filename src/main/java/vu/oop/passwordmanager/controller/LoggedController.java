@@ -92,11 +92,11 @@ public class LoggedController implements Initializable {
 
     @FXML
     protected void openPasswdGenerator(ActionEvent event) throws IOException {
-        ScenesManager.sceneSwitchToAnotherFXML(event, "PasswordGenerator");
+        ScenesManager.sceneSwitchToAnotherFXML(event, ScenesManager.PASSWD_GENERATOR_FILE);
     }
 
     @FXML
     protected void deleteUser(ActionEvent event) throws IOException {
-        ScenesManager.sceneSwitchToAnotherFXML(event, "UserDeletionPrompt");
+        ScenesManager.sceneSwitchToAnotherFXML(event, ScenesManager.USR_DEL_PRMPT_FILE);
     }
 }

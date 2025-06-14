@@ -33,14 +33,14 @@ public class Main extends Application {
             stage.setTitle("Password manager app");
             Scene scene = new Scene(root);
 
-            String css = this.getClass().getResource(ScenesManager.CSS_PATH + "Global" + ".css").toExternalForm();
+            String css = this.getClass().getResource(ScenesManager.CSS_PATH + ScenesManager.GLOBAL_FILE + ".css").toExternalForm();
             scene.getStylesheets().add(css);
 
             stage.setScene(scene);
             stage.setResizable(false);
 
             try {
-                Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/vu/oop/passwordmanager/icons/icon.png")));
+                Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream( ScenesManager.ICONS_PATH+ "icon.png")));
                 stage.getIcons().add(icon);
             } catch (NullPointerException e) {
                 System.err.println("Icon not found. Make sure 'icon.png' is in your resources folder.");
