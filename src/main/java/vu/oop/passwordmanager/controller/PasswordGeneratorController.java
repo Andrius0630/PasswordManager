@@ -32,6 +32,7 @@ public class PasswordGeneratorController implements Initializable {
     @FXML private CheckBox lower;
     @FXML private CheckBox digits;
     @FXML private CheckBox special;
+    @FXML private Label formatErrorText;
     @FXML private TextField generatedPassword;
     @FXML private Spinner<Integer> spinnerLength;
     int currentLength;
@@ -41,9 +42,16 @@ public class PasswordGeneratorController implements Initializable {
     @FXML
     protected void generate(ActionEvent event) throws IOException {
         RandomPasswordGenerator generator = new RandomPasswordGenerator();
-        String generatedString = generator.generate(currentLength, upper.isSelected(), lower.isSelected(), digits.isSelected(), special.isSelected());
-        if (generatedString != null && !generatedString.isBlank())
+        String generatedString = "";
+        try {
+             generatedString = generator.generate(currentLength, upper.isSelected(), lower.isSelected(), digits.isSelected(), special.isSelected());
+        } catch (IllegalArgumentException e) {
+            formatErrorText.setVisible(true);
+        }
+        if (generatedString != null && !generatedString.isBlank()) {
+            formatErrorText.setVisible(false);
             generatedPassword.setText(generatedString);
+        }
     }
 
     @FXML
