@@ -56,9 +56,7 @@ public class PasswordGeneratorController implements Initializable {
 
     @FXML
     protected void close(ActionEvent event) throws IOException {
-        Node source = (Node) event.getSource();
-        Stage stage = (Stage) source.getScene().getWindow();
-        stage.close();
+        ScenesManager.sceneSwitchToAnotherFXML(event, ScenesManager.LOGGED_FILE);
     }
 
     @Override

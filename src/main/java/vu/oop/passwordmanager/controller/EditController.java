@@ -87,7 +87,7 @@ public class EditController {
         return website.getText();
     }
     @FXML
-    protected void update(ActionEvent event) throws IOException {
+    protected void update(ActionEvent event) throws Exception {
         String newName = name.getText();
         if (!newName.isBlank()) {
             if (!isNameReserved(newName)) {
@@ -106,7 +106,8 @@ public class EditController {
         emptyNameText.setVisible(true);
     }
 
-    private boolean isNameReserved(String name) {
+    private boolean isNameReserved(String name) throws Exception {
+        name = HelperDB.encryptString(name);
         for (String reservedName : reservedNames)
             if (name.compareTo(reservedName) == 0 && name.compareTo(ownName) != 0)
                 return true;

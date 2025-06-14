@@ -30,7 +30,7 @@ public class AddController {
     }
 
     @FXML
-    protected void add(ActionEvent event) throws IOException {
+    protected void add(ActionEvent event) throws Exception {
         String newName = name.getText();
         if (!newName.isBlank()) {
             if (!isNameReserved(newName)) {
@@ -49,7 +49,8 @@ public class AddController {
         emptyNameText.setVisible(true);
     }
 
-    private boolean isNameReserved(String name) {
+    private boolean isNameReserved(String name) throws Exception {
+        name = HelperDB.encryptString(name);
         for (String reservedName : reservedNames)
             if (name.compareTo(reservedName) == 0)
                 return true;
