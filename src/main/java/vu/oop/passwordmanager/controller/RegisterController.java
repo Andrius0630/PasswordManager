@@ -56,18 +56,16 @@ public class RegisterController {
                 if (db.getConnection() != null) {
                     System.out.println("[DEBUG] ApiDB instance created and connected.");
 
-
-                    // Mandatory: Create tables for the user (Stays in onLoginClick)
                     db.createTABLES();
 
                     db.populateTABLE(username + "_pass",
                             new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},
-                            new String[] {"Saved_entry_1", "your_website_1.com", "your_username_1", "your_password_1"}
+                            new String[] {crypt.encrypt("Saved_entry_1"), crypt.encrypt("your_website_1.com"), crypt.encrypt("your_username_1"), crypt.encrypt("your_password_1")}
                     );
 
                     db.populateTABLE(username + "_pass",
                             new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},
-                            new String[] {"Saved_entry_2", "your_website_2.com", "your_username_2", "your_password_2"}
+                            new String[] {crypt.encrypt("Saved_entry_2"), crypt.encrypt("your_website_2.com"), crypt.encrypt("your_username_2"), crypt.encrypt("your_password_2")}
                     );
                 }
                 else {

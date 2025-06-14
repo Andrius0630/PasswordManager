@@ -24,9 +24,9 @@
             <id>default-cli</id>
             <configuration>
               <mainClass>vu.oop.passwordmanager/vu.oop.passwordmanager.app.Main</mainClass>
-              <launcher>app</launcher>
-              <jlinkZipName>app</jlinkZipName>
-              <jlinkImageName>app</jlinkImageName>
+              <launcher>PasswordManager</launcher>
+              <jlinkZipName>PasswordManager</jlinkZipName>
+              <jlinkImageName>PasswordManager</jlinkImageName>
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
               <noHeaderFiles>true</noHeaderFiles>

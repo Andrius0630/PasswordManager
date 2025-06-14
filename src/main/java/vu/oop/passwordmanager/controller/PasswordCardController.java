@@ -21,6 +21,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import me.gosimple.nbvcxz.Nbvcxz;
 import me.gosimple.nbvcxz.scoring.Result;
+import vu.oop.passwordmanager.util.HelperDB;
 
 import java.io.IOException;
 import java.net.URL;

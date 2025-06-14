@@ -55,7 +55,7 @@ public class LoggedController implements Initializable {
 
         reservedNames = new ArrayList<>();
         for (HelperDomainObject entry : passwordEntries) {
-            entriesList.getItems().add(entry.getEntryName());
+            entriesList.getItems().add(HelperDB.decryptString(entry.getEntryName()));
             reservedNames.add(entry.getEntryName());
         }
 
@@ -72,10 +72,10 @@ public class LoggedController implements Initializable {
                 }
                 PasswordCardController card = loader.getController();
                 int index = entriesList.getSelectionModel().getSelectedIndex();
-                card.displayName(passwordEntries.get(index).getEntryName());
-                card.displayUsername(passwordEntries.get(index).getDomainUsername());
-                card.displayPasswd(passwordEntries.get(index).getDomainPassword());
-                card.displayWebsite(passwordEntries.get(index).getDomainName());
+                card.displayName(HelperDB.decryptString(passwordEntries.get(index).getEntryName()));
+                card.displayUsername(HelperDB.decryptString(passwordEntries.get(index).getDomainUsername()));
+                card.displayPasswd(HelperDB.decryptString(passwordEntries.get(index).getDomainPassword()));
+                card.displayWebsite(HelperDB.decryptString(passwordEntries.get(index).getDomainName()));
                 card.setIndex(passwordEntries.get(index).getIndex());
                 card.setReservedNames(reservedNames);
 

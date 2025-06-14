@@ -1,6 +1,7 @@
 package vu.oop.passwordmanager.util;
 
 import vu.oop.passwordmanager.db.ApiDB;
+import vu.oop.passwordmanager.service.EncryptionAlgorithm;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,11 +11,17 @@ public class HelperDB {
     private static String usernameLogged;
     private static String passwordLogged;
     private static int userID;
+    private static EncryptionAlgorithm encryptionAlgorithm;
 
-    public static void saveValidUserCredentialsToMemory(String encodedUsername, String encodedPassword, int newUserID) {
+    public static void saveValidUserCredentialsToMemory(String encodedUsername, String encodedPassword, int newUserID, String newMasterKey) {
         usernameLogged = encodedUsername;
         passwordLogged = encodedPassword;
         userID = newUserID;
+        try {
+            encryptionAlgorithm = new EncryptionAlgorithm(newMasterKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static int isUserExist(String encodedUsername, String encodedPassword) {
@@ -85,7 +92,7 @@ public class HelperDB {
                             "password_id",                              // Column where the ID is stored
                             index,                                             // ID of the row to update
                             new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},     // Columns to update
-                            new String[] {name, website, username, password}       // New values for the columns
+                            new String[] {encryptString(name), encryptString(website), encryptString(username), encryptString(password)}       // New values for the columns
                     );
 
                 } else {
@@ -116,7 +123,7 @@ public class HelperDB {
 
                     db.populateTABLE(usernameLogged + "_pass",
                             new String[] {"entry_name", "domain_name", "domain_username", "domain_password"},
-                            new String[] {name, website, password, username}
+                            new String[] {encryptString(name), encryptString(website), encryptString(username), encryptString(password)}
                     );
 
                 } else {
@@ -192,5 +199,23 @@ public class HelperDB {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static String encryptString(String target) throws Exception {
+        try {
+            return encryptionAlgorithm.encrypt(target);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String decryptString(String target){
+        try {
+            return encryptionAlgorithm.decrypt(target);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

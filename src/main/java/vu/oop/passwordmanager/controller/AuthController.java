@@ -60,7 +60,7 @@ public class AuthController {
                 nonExistentUserText.setVisible(true);
                 return;
             } else
-                HelperDB.saveValidUserCredentialsToMemory(encodedUsername, encodedPassword, userId);
+                HelperDB.saveValidUserCredentialsToMemory(encodedUsername, encodedPassword, userId, password);
 
 
         }
