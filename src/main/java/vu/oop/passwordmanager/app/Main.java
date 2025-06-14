@@ -38,6 +38,13 @@ public class Main extends Application {
 
             stage.setScene(scene);
             stage.setResizable(false);
+
+            try {
+                Image icon = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/vu/oop/passwordmanager/icons/icon.png")));
+                stage.getIcons().add(icon);
+            } catch (NullPointerException e) {
+                System.err.println("Icon not found. Make sure 'icon.png' is in your resources folder.");
+            }
             stage.show();
 
         } catch (Exception e) {
