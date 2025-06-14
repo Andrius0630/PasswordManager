@@ -143,6 +143,8 @@ public class LoggedController implements Initializable {
 
     @FXML
     protected void deleteUser(ActionEvent event) throws IOException {
+        if (passwordGeneratorStage != null)
+            passwordGeneratorStage.close();
         ScenesManager.sceneSwitchToAnotherFXML(event, "UserDeletionPrompt");
     }
 }
