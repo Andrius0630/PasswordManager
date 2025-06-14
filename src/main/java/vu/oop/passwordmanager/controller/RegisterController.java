@@ -13,11 +13,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import vu.oop.passwordmanager.db.ApiDB;
 import vu.oop.passwordmanager.service.EncryptionAlgorithm;
-import vu.oop.passwordmanager.util.HelperDomainObject;
-
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class RegisterController {
     @FXML private TextField userNameField;

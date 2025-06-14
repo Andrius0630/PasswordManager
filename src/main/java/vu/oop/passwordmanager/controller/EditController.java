@@ -9,12 +9,8 @@ package vu.oop.passwordmanager.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import vu.oop.passwordmanager.util.HelperDB;
 
 import java.io.IOException;
@@ -37,7 +33,11 @@ public class EditController {
     }
 
     public void setOwnName(String newOwnName) {
-        this.ownName = newOwnName;
+        try {
+            this.ownName = HelperDB.encryptString(newOwnName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     protected void setIndex(int newIndex) {
@@ -108,10 +108,13 @@ public class EditController {
 
     private boolean isNameReserved(String name) throws Exception {
         name = HelperDB.encryptString(name);
-        for (String reservedName : reservedNames)
-            if (name.compareTo(reservedName) == 0 && name.compareTo(ownName) != 0)
-                return true;
+        if (name != null && ownName != null) {
+            for (String reservedName : reservedNames)
+                if (name.compareTo(reservedName) == 0 && name.compareTo(ownName) != 0)
+                    return true;
+        }
         return false;
+
     }
 
     @FXML

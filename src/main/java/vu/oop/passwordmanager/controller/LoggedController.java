@@ -17,13 +17,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
-import vu.oop.passwordmanager.service.EncryptionAlgorithm;
 import vu.oop.passwordmanager.util.HelperDB;
 import vu.oop.passwordmanager.util.HelperDomainObject;
 

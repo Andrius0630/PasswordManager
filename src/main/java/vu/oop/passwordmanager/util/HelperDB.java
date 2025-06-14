@@ -1,3 +1,10 @@
+/**
+ * Helper for interacting with the database
+ * @author Andrius Kolenda
+ * @contact: andrius.kolenda@mif.stud.vu.lt
+ * @since 2025-06-04
+ */
+
 package vu.oop.passwordmanager.util;
 
 import vu.oop.passwordmanager.db.ApiDB;

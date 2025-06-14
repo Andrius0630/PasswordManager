@@ -13,15 +13,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-import vu.oop.passwordmanager.service.EncryptionAlgorithm;
 import vu.oop.passwordmanager.service.RandomPasswordGenerator;
-import vu.oop.passwordmanager.util.HelperDB;
 
 import java.io.IOException;
 import java.net.URL;
